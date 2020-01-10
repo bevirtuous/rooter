@@ -6,7 +6,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "contributors": [
+    "Richard Gorman <richardgorman@outlook.com> (https://github.com/richardgorman)",
+    "Florian Müller <flomueller1981@gmail.com> (https://github.com/devbucket)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:bevirtuous/rooter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bevirtuous/rooter/issues"
+  },
+  "homepage": "https://github.com/bevirtuous/rooter",
   "license": "MIT",
   "peerDependencies": {
     "react": "^16.8.0"
