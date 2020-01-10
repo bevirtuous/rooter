@@ -12,9 +12,10 @@ module.exports = {
   plugins: [
     babel({
       exclude: 'node_modules/**',
-      presets: ['@babel/env', '@babel/preset-react']
     }),
-    resolve(),
+    resolve({
+      preferBuiltins: false,
+    }),
     commonjs(),
   ]
 };
