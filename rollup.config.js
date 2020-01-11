@@ -10,9 +10,12 @@ const pkg = require('./package.json');
 const env = process.env.NODE_ENV;
 
 const config = {
-  input: 'src/index.js',
+  input: {
+    index: 'src/index.js',
+  },
   output: {
-    file: 'dist/index.js',
+    dir: 'dist',
+    entryFileNames: '[name].js',
     format: 'cjs',
   },
   external: Object.keys(pkg.peerDependencies || {}).concat('react-dom').concat(builtins),
