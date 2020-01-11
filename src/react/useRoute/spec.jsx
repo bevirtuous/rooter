@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { router, stack } from '../../index';
+import router from '../../core/Router';
+import stack from '../../core/Stack';
 import Router from '../Router';
 import Route from '../Route';
 import useRoute from '.';

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   router,
-  stack as routeStack,
   onPush,
   onPop,
   onReplace,
   onReset,
   onUpdate,
-} from '../../index';
+} from '../../core/index';
+import routeStack from '../../core/Stack';
 import { RouterContext } from '../context';
 
 function Router({ children, history }) {

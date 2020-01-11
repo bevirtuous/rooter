@@ -1,4 +1,4 @@
-import { addCallback } from '../../core/events';
+import addCallback from '../../core/events/addCallback';
 import * as events from '../constants';
 
 /**

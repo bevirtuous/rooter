@@ -11,7 +11,7 @@ const env = process.env.NODE_ENV;
 
 const config = {
   input: {
-    index: 'src/index.js',
+    core: 'src/core/index.js',
     react: 'src/react/index.js',
   },
   output: {

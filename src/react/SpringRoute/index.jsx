@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { router, stack } from '../../index';
+import { router, stack } from '../../core/index';
 import Route from '../Route';
 import Child from './components/Route';
 import { RouteContext } from '../context';

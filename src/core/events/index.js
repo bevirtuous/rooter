@@ -1,8 +1,6 @@
 import * as events from '../constants';
 import addCallback from './addCallback';
 
-export { addCallback };
-
 /**
  * Registers a callback to be executed after the push event.
  * @param {Function} callback The callback to register.

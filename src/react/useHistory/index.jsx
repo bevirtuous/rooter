@@ -1,5 +1,6 @@
 import { useContext } from 'react';
-import { router, stack } from '../../index';
+import router from '../../core/Router';
+import stack from '../../core/Stack';
 import { RouterContext } from '../context';
 
 const useHistory = () => {
