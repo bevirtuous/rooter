@@ -1,9 +1,20 @@
 module.exports = (api) => {
-  api.cache(false);
+  api.cache(true);
 
   return {
+    presets: [
+      ['@babel/preset-env', {
+        modules: false
+      }],
+      '@babel/preset-react',
+    ],
     plugins: [
-      '@babel/plugin-proposal-class-properties',
+      ['@babel/plugin-proposal-class-properties', {
+        loose: true,
+      }],
+      ['@babel/plugin-proposal-object-rest-spread', {
+        loose: true,
+      }],
       ['@babel/plugin-transform-runtime', {
         helpers: false,
         regenerator: true,
@@ -13,11 +24,6 @@ module.exports = (api) => {
       test: {
         presets: [
           ['@babel/preset-env', { modules: 'cjs' }]
-        ]
-      },
-      build: {
-        presets: [
-          ['@babel/preset-env', { modules: false }]
         ]
       }
     }

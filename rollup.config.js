@@ -1,21 +1,48 @@
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
-import resolve from 'rollup-plugin-node-resolve';
+const babel = require('rollup-plugin-babel');
+const resolve = require('@rollup/plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
+const json = require('@rollup/plugin-json');
+const replace = require('@rollup/plugin-replace');
+const builtins = require('builtin-modules');
+const { terser } = require('rollup-plugin-terser');
+const pkg = require('./package.json');
 
-module.exports = {
+const env = process.env.NODE_ENV;
+
+const config = {
   input: 'src/index.js',
   output: {
     file: 'dist/index.js',
-    format: 'esm'
+    format: 'cjs',
   },
-  external: ['react'],
+  external: Object.keys(pkg.peerDependencies || {}).concat('react-dom').concat(builtins),
   plugins: [
     babel({
       exclude: 'node_modules/**',
     }),
+    json(),
     resolve({
       preferBuiltins: false,
+      extensions: ['.mjs', '.js', '.jsx', '.json', '.node'],
+    }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify(env),
     }),
     commonjs(),
-  ]
+  ],
 };
+
+if (env === 'production') {
+  config.plugins.push(
+    terser({
+      compress: {
+        pure_getters: true,
+        unsafe: true,
+        unsafe_comps: true,
+        warnings: false,
+      },
+    })
+  );
+}
+
+module.exports = config;
