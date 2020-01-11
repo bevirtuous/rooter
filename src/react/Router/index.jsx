@@ -17,7 +17,7 @@ function Router({ children, history }) {
     next: router.getCurrentRoute().id,
   });
 
-  function update({ prev, next }) {
+  function handleChange({ prev, next }) {
     setRoutes({
       prev: prev ? prev.id : null,
       next: next.id,
@@ -32,10 +32,10 @@ function Router({ children, history }) {
   }
 
   useEffect(() => {
-    onPush(update);
-    onPop(update);
-    onReplace(update);
-    onReset(update);
+    onPush(handleChange);
+    onPop(handleChange);
+    onReplace(handleChange);
+    onReset(handleChange);
     onUpdate(handleUpdate);
   }, []);
 

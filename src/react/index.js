@@ -5,4 +5,3 @@ export { default as useParams } from './useParams';
 export { default as useQuery } from './useQuery';
 export { default as useRoute } from './useRoute';
 export * from './context';
-export * from './events';
