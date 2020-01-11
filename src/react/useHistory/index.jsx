@@ -8,7 +8,7 @@ const useHistory = () => {
 
   return {
     current: stack.get(next),
-    currentIndex: router.routeIndex,
+    currentIndex: router.currentIndex,
     previous: stack.get(prev),
 
     push: router.push,

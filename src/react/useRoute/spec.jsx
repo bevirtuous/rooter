@@ -23,7 +23,7 @@ describe('useRoute()', () => {
       </Router>
     ));
 
-    const route = stack.getByIndex(router.routeIndex);
+    const route = stack.getByIndex(router.currentIndex);
 
     expect(useRoute1).toMatchObject({
       ...route,

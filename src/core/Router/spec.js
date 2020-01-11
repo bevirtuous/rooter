@@ -93,7 +93,7 @@ describe('Router', () => {
       emitter.once(constants.ON_PUSH, didCallback);
 
       return router.push(params).then((result) => {
-        expect(router.routeIndex).toBe(1);
+        expect(router.currentIndex).toBe(1);
 
         const [, route] = stack.last();
 
@@ -117,7 +117,7 @@ describe('Router', () => {
       await router.pop({ steps: 2 });
       await router.push({ pathname: '/myroute/abc' });
 
-      expect(router.routeIndex).toBe(1);
+      expect(router.currentIndex).toBe(1);
       expect(stack.getAll().size).toBe(2);
       expect(stack.getByIndex(1).pathname).toBe('/myroute/abc');
     });
@@ -176,7 +176,7 @@ describe('Router', () => {
         const route = stack.getByIndex(0);
 
         expect(stack.getAll().size).toBe(2);
-        expect(router.routeIndex).toBe(0);
+        expect(router.currentIndex).toBe(0);
         expect(route).toEqual(result.next);
         expect(didCallback).toHaveBeenCalledWith(result);
         expect(router.history.location.pathname).toBe(pathname1);
@@ -190,7 +190,7 @@ describe('Router', () => {
       await router.push({ pathname: '/myroute/789' });
 
       router.pop({ steps: 2 }).then((result) => {
-        const currentRoute = stack.getByIndex(router.routeIndex);
+        const currentRoute = stack.getByIndex(router.currentIndex);
         expect(currentRoute).toBe(result.next);
         done();
       });
@@ -225,7 +225,7 @@ describe('Router', () => {
       };
 
       router.pop({ state }).then(() => {
-        const currentRoute = stack.getByIndex(router.routeIndex);
+        const currentRoute = stack.getByIndex(router.currentIndex);
         expect(currentRoute.state).toEqual(state);
         done();
       });
@@ -309,7 +309,7 @@ describe('Router', () => {
       router.push({ pathname: '/myroute/456' });
       router.push({ pathname: '/myroute/789' });
 
-      const prevRoute = stack.getByIndex(router.routeIndex);
+      const prevRoute = stack.getByIndex(router.currentIndex);
       const state = { reset: true };
 
       router.reset(state).then((result) => {
