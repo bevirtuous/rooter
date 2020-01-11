@@ -123,13 +123,13 @@ describe('Router', () => {
     });
 
     it('should reject when params are missing', () => (
-      router.push().catch(error => (
+      router.push().catch((error) => (
         expect(error).toEqual(new Error(errors.EPARAMSMISSING))
       ))
     ));
 
     it('should reject when params are empty', () => (
-      router.push({}).catch(error => (
+      router.push({}).catch((error) => (
         expect(error).toEqual(new Error(errors.EPARAMSEMPTY))
       ))
     ));
@@ -198,7 +198,7 @@ describe('Router', () => {
 
     it('should not pop when steps is negative', async () => {
       await router.push({ pathname: '/myroute/456' });
-      await router.pop({ steps: -3 }).catch(error => (
+      await router.pop({ steps: -3 }).catch((error) => (
         expect(error).toEqual(new Error(errors.EINVALIDSTEPS))
       ));
     });
@@ -263,13 +263,13 @@ describe('Router', () => {
     });
 
     it('should reject when params are missing', () => (
-      router.replace().catch(error => (
+      router.replace().catch((error) => (
         expect(error).toEqual(new Error(errors.EPARAMSMISSING))
       ))
     ));
 
     it('should reject when params are empty', () => (
-      router.replace({}).catch(error => (
+      router.replace({}).catch((error) => (
         expect(error).toEqual(new Error(errors.EPARAMSEMPTY))
       ))
     ));
@@ -293,7 +293,7 @@ describe('Router', () => {
         pathname: pathname1,
       };
 
-      return router.replace(params).catch(error => (
+      return router.replace(params).catch((error) => (
         expect(error).toEqual(new Error(errors.EINVALIDPATHNAME))
       ));
     });
@@ -357,13 +357,13 @@ describe('Router', () => {
     });
 
     it('should not reset when pathname is missing', () => (
-      router.resetTo().catch(error => (
+      router.resetTo().catch((error) => (
         expect(error).toEqual(new Error(errors.EMISSINGPATHNAME))
       ))
     ));
 
     it('should not reset to non-matching pathname', () => (
-      router.resetTo('/invalid/path').catch(error => (
+      router.resetTo('/invalid/path').catch((error) => (
         expect(error).toEqual(new Error(errors.EINVALIDPATHNAME))
       ))
     ));
@@ -390,25 +390,25 @@ describe('Router', () => {
     });
 
     it('should reject when id is missing', () => {
-      router.update().catch(error => (
+      router.update().catch((error) => (
         expect(error).toEqual(new Error(errors.EPARAMSINVALID))
       ));
     });
 
     it('should reject when state is missing', () => {
-      router.update(12345).catch(error => (
+      router.update(12345).catch((error) => (
         expect(error).toEqual(new Error(errors.EPARAMSINVALID))
       ));
     });
 
     it('should reject when state is empty', () => {
-      router.update(12345, {}).catch(error => (
+      router.update(12345, {}).catch((error) => (
         expect(error).toEqual(new Error(errors.EPARAMSINVALID))
       ));
     });
 
     it('should reject when id doesn`t match a route', () => {
-      router.update(12345, { test: 123 }).catch(error => (
+      router.update(12345, { test: 123 }).catch((error) => (
         expect(error).toEqual(new Error(errors.EINVALIDID))
       ));
     });

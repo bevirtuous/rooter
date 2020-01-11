@@ -12,6 +12,7 @@ const env = process.env.NODE_ENV;
 const config = {
   input: {
     index: 'src/index.js',
+    react: 'src/react/index.js',
   },
   output: {
     dir: 'dist',
@@ -35,17 +36,17 @@ const config = {
   ],
 };
 
-if (env === 'production') {
-  config.plugins.push(
-    terser({
-      compress: {
-        pure_getters: true,
-        unsafe: true,
-        unsafe_comps: true,
-        warnings: false,
-      },
-    })
-  );
-}
+// if (env === 'production') {
+//   config.plugins.push(
+//     terser({
+//       compress: {
+//         pure_getters: true,
+//         unsafe: true,
+//         unsafe_comps: true,
+//         warnings: false,
+//       },
+//     })
+//   );
+// }
 
 module.exports = config;

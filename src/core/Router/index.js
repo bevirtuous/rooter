@@ -230,7 +230,7 @@ class Router {
    * @returns {string|null}
    */
   findPattern = (pathname) => {
-    const pattern = Object.keys(this.patterns).find(key => this.patterns[key].match(pathname));
+    const pattern = Object.keys(this.patterns).find((key) => this.patterns[key].match(pathname));
     return pattern || null;
   }
 
@@ -275,7 +275,7 @@ class Router {
     delete this.patterns[pattern];
   }
 
-  handleReplace = params => new Promise((resolve, reject) => {
+  handleReplace = (params) => new Promise((resolve, reject) => {
     // Check for missing parameters.
     if (!params) {
       reject(new Error(errors.EPARAMSMISSING));
