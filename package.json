@@ -59,6 +59,8 @@
   "dependencies": {
     "history": "^5.0.0-beta.3",
     "path-match": "^1.2.4",
-    "query-string": "^6.9.0"
+    "query-string": "^6.9.0",
+    "rxjs": "^6.5.4",
+    "rxjs-compat": "^6.5.4"
   }
 }

@@ -13,6 +13,7 @@ const config = {
   input: {
     core: 'src/core/index.js',
     react: 'src/react/index.js',
+    rx: 'src/rx/index.js',
   },
   output: {
     dir: 'dist',
@@ -36,17 +37,17 @@ const config = {
   ],
 };
 
-// if (env === 'production') {
-//   config.plugins.push(
-//     terser({
-//       compress: {
-//         pure_getters: true,
-//         unsafe: true,
-//         unsafe_comps: true,
-//         warnings: false,
-//       },
-//     })
-//   );
-// }
+if (env === 'production') {
+  config.plugins.push(
+    terser({
+      compress: {
+        pure_getters: true,
+        unsafe: true,
+        unsafe_comps: true,
+        warnings: false,
+      },
+    })
+  );
+}
 
 module.exports = config;
