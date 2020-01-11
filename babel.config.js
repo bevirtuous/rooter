@@ -4,7 +4,7 @@ module.exports = (api) => {
   return {
     presets: [
       ['@babel/preset-env', {
-        modules: false
+        modules: false,
       }],
       '@babel/preset-react',
     ],
@@ -23,9 +23,9 @@ module.exports = (api) => {
     env: {
       test: {
         presets: [
-          ['@babel/preset-env', { modules: 'cjs' }]
-        ]
-      }
-    }
+          ['@babel/preset-env', { modules: 'cjs' }],
+        ],
+      },
+    },
   };
 };
