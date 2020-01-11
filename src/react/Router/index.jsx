@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  router,
   onPush,
   onPop,
   onReplace,
   onReset,
   onUpdate,
 } from '../../core/index';
+import router from '../../core/Router';
 import routeStack from '../../core/Stack';
 import { RouterContext } from '../context';
 
