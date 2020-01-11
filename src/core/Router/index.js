@@ -19,8 +19,8 @@ class Router {
     // The patterns are collected to match against pathnames.
     this.patterns = {};
 
-    // The `routeIndex` is used to track which stack entry is the current route.
-    this.routeIndex = 0;
+    // The `currentIndex` is used to track which stack entry is the current route.
+    this.currentIndex = 0;
 
     this.action = constants.PUSH;
 
@@ -43,7 +43,7 @@ class Router {
       return;
     }
 
-    const next = stack.getByIndex(this.routeIndex + 1);
+    const next = stack.getByIndex(this.currentIndex + 1);
 
     if (next && location.state && location.state.route && next.id === location.state.route.id) {
       this.handlePush({
@@ -91,8 +91,8 @@ class Router {
     }
 
     // Get id of target route.
-    const targetIndex = Math.max(this.routeIndex - steps, 0);
-    const prev = stack.getByIndex(this.routeIndex);
+    const targetIndex = Math.max(this.currentIndex - steps, 0);
+    const prev = stack.getByIndex(this.currentIndex);
     const next = stack.getByIndex(targetIndex);
     const end = { prev, next };
 
@@ -105,7 +105,7 @@ class Router {
      */
     const callback = () => {
       unlisten();
-      this.routeIndex = targetIndex;
+      this.currentIndex = targetIndex;
       this.action = constants.POP;
 
       if (emit) {
@@ -163,14 +163,14 @@ class Router {
 
       // Remove all unwanted items from the stack.
       if (cleanStack) {
-        while (this.routeIndex < stack.getAll().size - 1) {
+        while (this.currentIndex < stack.getAll().size - 1) {
           const [id] = stack.last();
           stack.remove(id);
         }
       }
 
-      const prev = stack.getByIndex(this.routeIndex);
-      const next = nativePush ? stack.getByIndex(this.routeIndex + 1) : new Route({
+      const prev = stack.getByIndex(this.currentIndex);
+      const next = nativePush ? stack.getByIndex(this.currentIndex + 1) : new Route({
         pathname,
         pattern,
         state,
@@ -189,7 +189,7 @@ class Router {
         unlisten();
 
         // Increment the route index.
-        this.routeIndex += 1;
+        this.currentIndex += 1;
 
         this.action = constants.PUSH;
 
@@ -304,7 +304,7 @@ class Router {
       return;
     }
 
-    const { id } = stack.getByIndex(this.routeIndex);
+    const { id } = stack.getByIndex(this.currentIndex);
     const prev = stack.get(id);
     const next = new Route({
       pathname,
@@ -388,13 +388,13 @@ class Router {
   reset = (state = null) => new Promise((resolve, reject) => {
     const [, route] = stack.first();
 
-    const prev = stack.getByIndex(this.routeIndex);
+    const prev = stack.getByIndex(this.currentIndex);
     const next = {
       prev,
       next: route,
     };
 
-    if (this.routeIndex === 0) {
+    if (this.currentIndex === 0) {
       reject();
       return;
     }
@@ -406,7 +406,7 @@ class Router {
     const params = {
       emit: false,
       forceNative: true,
-      steps: this.routeIndex,
+      steps: this.currentIndex,
     };
 
     this.handlePop(params)
@@ -434,7 +434,7 @@ class Router {
       return;
     }
 
-    if (this.routeIndex === 0) {
+    if (this.currentIndex === 0) {
       reject();
       return;
     }
@@ -443,7 +443,7 @@ class Router {
     const popParams = {
       emit: false,
       forceNative: true,
-      steps: this.routeIndex,
+      steps: this.currentIndex,
     };
 
     this.handlePop(popParams).then(() => {
@@ -493,7 +493,7 @@ class Router {
 
   /**
    * @returns {Route}
-   */ getCurrentRoute = () => stack.getByIndex(this.routeIndex)
+   */ getCurrentRoute = () => stack.getByIndex(this.currentIndex)
 
   /**
    * Returns the matches pattern for the given pathname.
