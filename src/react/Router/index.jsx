@@ -37,7 +37,7 @@ function Router({ children, history }) {
 
     emitter.on(EVENT, handler);
 
-    return emitter.off(EVENT, handler);
+    return () => emitter.off(EVENT, handler);
   }, []);
 
   useEffect(() => {
