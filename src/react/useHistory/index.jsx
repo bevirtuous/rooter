@@ -10,12 +10,6 @@ const useHistory = () => {
     current: stack.get(next),
     currentIndex: router.currentIndex,
     previous: stack.get(prev),
-
-    push: router.push,
-    pop: router.pop,
-    replace: router.replace,
-    reset: router.reset,
-    resetTo: router.resetTo,
   };
 };
 
