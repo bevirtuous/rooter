@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  onPush,
-  onPop,
-  onReplace,
-  onReset,
-  onUpdate,
-} from '../../core/index';
 import router from '../../core/Router';
 import routeStack from '../../core/Stack';
 import { RouterContext } from '../context';
+import { EVENT, UPDATE } from '../../core/constants';
+import emitter from '../../core/emitter';
 
 function Router({ children, history }) {
   const [routes, setRoutes] = useState({
@@ -32,11 +27,13 @@ function Router({ children, history }) {
   }
 
   useEffect(() => {
-    onPush(handleChange);
-    onPop(handleChange);
-    onReplace(handleChange);
-    onReset(handleChange);
-    onUpdate(handleUpdate);
+    emitter.addListener(EVENT, (params) => {
+      if (params.action === UPDATE) {
+        handleUpdate(params.route);
+      } else {
+        handleChange(params);
+      }
+    });
   }, []);
 
   useEffect(() => {

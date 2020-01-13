@@ -7,9 +7,6 @@ import stack from '../Stack';
 import * as constants from '../constants';
 
 class Router {
-  /**
-   * @param {Function} createHistory The function to create a history instance.
-   */
   constructor(createHistory = history) {
     // Flag to indicate a native history event. Should always be reset to true.
     this.nativeEvent = true;
@@ -35,10 +32,7 @@ class Router {
     this.historyListener = this.history.listen(this.handleNativeEvent);
   }
 
-  /**
-   * @param {Object} The new history.
-   */
-  handleNativeEvent = ({ location, action }) => {
+  handleNativeEvent = (location, action) => {
     if (!this.nativeEvent) {
       return;
     }
@@ -94,11 +88,12 @@ class Router {
     const targetIndex = Math.max(this.currentIndex - steps, 0);
     const prev = stack.getByIndex(this.currentIndex);
     const next = stack.getByIndex(targetIndex);
-    const end = { prev, next };
 
     if (state) {
       next.state = Object.assign(next.state, state);
     }
+
+    const end = { action: constants.POP, prev, next };
 
     /**
      *
@@ -109,7 +104,7 @@ class Router {
       this.action = constants.POP;
 
       if (emit) {
-        emitter.emit(constants.ON_POP, end);
+        emitter.emit(constants.EVENT, end);
       }
 
       resolve(end);
@@ -195,7 +190,7 @@ class Router {
 
         // Emit completion event.
         if (emit) {
-          emitter.emit(constants.ON_PUSH, { prev, next });
+          emitter.emit(constants.EVENT, { action: constants.PUSH, prev, next });
         }
 
         // Resolve the Promise.
@@ -265,9 +260,9 @@ class Router {
     if (match(route.pathname)) {
       route.setPattern(pattern);
 
-      const end = { prev: null, next: route };
+      const next = { action: constants.PUSH, prev: null, next: route };
 
-      emitter.emit(constants.ON_PUSH, end, true);
+      emitter.emit(constants.EVENT, next, true);
     }
   }
 
@@ -311,7 +306,7 @@ class Router {
       pattern,
       state,
     });
-    const end = { prev, next };
+    const end = { action: constants.REPLACE, prev, next };
 
     // Add item to the stack.
     stack.add(id, next);
@@ -327,7 +322,7 @@ class Router {
 
       // Emit completion event.
       if (emit) {
-        emitter.emit(constants.ON_REPLACE, end);
+        emitter.emit(constants.EVENT, end);
       }
 
       resolve(end);
@@ -386,10 +381,13 @@ class Router {
    * @returns {Promise}
    */
   reset = (state = null) => new Promise((resolve, reject) => {
+    this.nativeEvent = false;
+
     const [, route] = stack.first();
 
     const prev = stack.getByIndex(this.currentIndex);
     const next = {
+      action: constants.RESET,
       prev,
       next: route,
     };
@@ -411,7 +409,8 @@ class Router {
 
     this.handlePop(params)
       .then(() => {
-        emitter.emit(constants.ON_RESET, next);
+        emitter.emit(constants.EVENT, next);
+        this.nativeEvent = true;
         resolve(next);
       });
   });
@@ -439,6 +438,8 @@ class Router {
       return;
     }
 
+    this.nativeEvent = false;
+
     const previous = this.getCurrentRoute();
     const popParams = {
       emit: false,
@@ -447,14 +448,16 @@ class Router {
     };
 
     this.handlePop(popParams).then(() => {
-      this.handleReplace({ pathname, state }).then(() => {
+      this.handleReplace({ pathname, state, emit: false }).then(() => {
         const [, route] = stack.first();
         const next = {
+          action: constants.RESET,
           prev: previous,
           next: route,
         };
 
-        emitter.emit(constants.ON_RESET, next);
+        this.nativeEvent = true;
+        emitter.emit(constants.EVENT, next);
         resolve(next);
       });
     });
@@ -485,7 +488,7 @@ class Router {
     stack.update(id, route);
 
     if (emit) {
-      emitter.emit(constants.ON_UPDATE, route);
+      emitter.emit(constants.EVENT, { action: constants.UPDATE, route });
     }
 
     resolve(route);

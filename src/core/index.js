@@ -1,7 +1,5 @@
 import router from './Router';
 
-export * from './events';
-
 export const history = {
   push: router.push,
   pop: router.pop,

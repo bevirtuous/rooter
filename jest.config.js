@@ -8,7 +8,6 @@ module.exports = {
     '/node_modules/',
     '/dist/',
     '/coverage/',
-    '/SpringRoute/',
   ],
   transformIgnorePatterns: [
     '/node_modules/',

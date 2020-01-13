@@ -1,4 +1,9 @@
-import { of } from 'rxjs';
-import subject from './subject';
+import { Observable } from 'rxjs';
+import emitter from '../core/emitter';
+import { EVENT } from '../core/constants';
 
-export const history$ = of(subject);
+const history$ = Observable.create((observer) => {
+  emitter.addListener(EVENT, (params) => observer.next(params));
+});
+
+export { history$ };

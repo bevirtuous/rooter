@@ -10,7 +10,7 @@ const dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => 123456);
 
 describe('Router', () => {
   beforeEach(() => {
-    stack.constructor();
+    stack.clear();
     router.constructor();
     router.register(pattern1);
   });
@@ -90,7 +90,7 @@ describe('Router', () => {
 
       const didCallback = jest.fn();
 
-      emitter.once(constants.ON_PUSH, didCallback);
+      emitter.once(constants.EVENT, didCallback);
 
       return router.push(params).then((result) => {
         expect(router.currentIndex).toBe(1);
@@ -101,10 +101,13 @@ describe('Router', () => {
         expect(route.query).toEqual({ s: 'phrase' });
         expect(route.state).toEqual({ test: 123 });
 
-        expect(didCallback).toHaveBeenCalledWith(result);
+        expect(didCallback).toHaveBeenCalledWith({
+          action: constants.PUSH,
+          next: result.next,
+          prev: result.prev,
+        });
 
-        expect(router.history.location.pathname).toBe(pathname1);
-        expect(router.history.location.search).toBe('?s=phrase');
+        expect(router.history.location.pathname).toBe(`${pathname1}?s=phrase`);
       });
     });
 
@@ -141,7 +144,7 @@ describe('Router', () => {
       };
 
       const callback = jest.fn();
-      emitter.once(constants.ON_PUSH, callback);
+      emitter.once(constants.event, callback);
 
       return router.push(params).then(() => {
         expect(callback).not.toHaveBeenCalled();
@@ -168,9 +171,9 @@ describe('Router', () => {
     it('should resolve correctly', async (done) => {
       const didCallback = jest.fn();
 
-      emitter.once(constants.ON_POP, didCallback);
-
       await router.push({ pathname: '/myroute/456' });
+
+      emitter.once(constants.EVENT, didCallback);
 
       router.pop().then((result) => {
         const route = stack.getByIndex(0);
@@ -178,7 +181,11 @@ describe('Router', () => {
         expect(stack.getAll().size).toBe(2);
         expect(router.currentIndex).toBe(0);
         expect(route).toEqual(result.next);
-        expect(didCallback).toHaveBeenCalledWith(result);
+        expect(didCallback).toHaveBeenCalledWith({
+          action: constants.POP,
+          next: result.next,
+          prev: result.prev,
+        });
         expect(router.history.location.pathname).toBe(pathname1);
 
         done();
@@ -207,7 +214,7 @@ describe('Router', () => {
       await router.push({ pathname: '/myroute/456' });
       await router.push({ pathname: '/myroute/789' });
 
-      router.pop({ steps: 5 }).then((result) => {
+      return router.pop({ steps: 5 }).then((result) => {
         expect(result.next).toBe(stack.getByIndex(0));
         done();
       });
@@ -231,11 +238,12 @@ describe('Router', () => {
       });
     });
 
-    it('should not emit didPop event', async () => {
+    it('should not emit event', async () => {
       const callback = jest.fn();
-      emitter.once(constants.ON_POP, callback);
 
       await router.push({ pathname: '/myroute/456' });
+
+      emitter.once(constants.EVENT, callback);
 
       return router.pop({ emit: false }).then(() => {
         expect(callback).not.toHaveBeenCalled();
@@ -246,7 +254,7 @@ describe('Router', () => {
   describe('replace()', () => {
     it('should replace correctly', (done) => {
       const didCallback = jest.fn();
-      emitter.once(constants.ON_REPLACE, didCallback);
+      emitter.once(constants.EVENT, didCallback);
 
       router.replace({
         pathname: '/myroute/456',
@@ -257,7 +265,11 @@ describe('Router', () => {
         expect(stack.getAll().size).toBe(1);
         expect(route.pathname).toBe('/myroute/456');
         expect(route.state).toEqual({ test: 123 });
-        expect(didCallback).toHaveBeenCalledWith(result);
+        expect(didCallback).toHaveBeenCalledWith({
+          action: constants.REPLACE,
+          next: result.next,
+          prev: result.prev,
+        });
         done();
       });
     });
@@ -281,7 +293,7 @@ describe('Router', () => {
       };
 
       const callback = jest.fn();
-      emitter.once(constants.ON_REPLACE, callback);
+      emitter.once(constants.EVENT, callback);
 
       return router.replace(params).then(() => {
         expect(callback).not.toHaveBeenCalled();
@@ -304,10 +316,10 @@ describe('Router', () => {
       const [, firstRoute] = stack.first();
       const didCallback = jest.fn();
 
-      emitter.once(constants.ON_RESET, didCallback);
-
       router.push({ pathname: '/myroute/456' });
       router.push({ pathname: '/myroute/789' });
+
+      emitter.once(constants.EVENT, didCallback);
 
       const prevRoute = stack.getByIndex(router.currentIndex);
       const state = { reset: true };
@@ -324,7 +336,7 @@ describe('Router', () => {
 
     it('should not reset when there is only one route', (done) => {
       const didCallback = jest.fn();
-      emitter.once(constants.ON_RESET, didCallback);
+      emitter.once(constants.EVENT, didCallback);
 
       router.reset().catch(() => {
         expect(didCallback).not.toHaveBeenCalled();
@@ -337,9 +349,9 @@ describe('Router', () => {
     it('should correctly reset to the specified route', async (done) => {
       const didCallback = jest.fn();
 
-      emitter.once(constants.ON_RESET, didCallback);
-
       await router.push({ pathname: '/myroute/456' });
+
+      emitter.once(constants.EVENT, didCallback);
 
       const previous = router.getCurrentRoute();
 
@@ -373,7 +385,7 @@ describe('Router', () => {
     it('should correctly update/override a route`s state', async () => {
       const [id, route] = stack.last();
       const callback = jest.fn();
-      emitter.once(constants.ON_UPDATE, callback);
+      emitter.once(constants.EVENT, callback);
 
       const state = {
         test: 123,
@@ -383,7 +395,10 @@ describe('Router', () => {
       expect(route.state).toEqual(state);
       expect(route.updated).toEqual(dateNowSpy());
 
-      expect(callback).toHaveBeenCalledWith(route);
+      expect(callback).toHaveBeenCalledWith({
+        action: constants.UPDATE,
+        route,
+      });
 
       await router.update(id, { test: 456 });
       expect(route.state).toEqual({ test: 456 });
