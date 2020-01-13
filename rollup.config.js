@@ -4,7 +4,6 @@ const commonjs = require('@rollup/plugin-commonjs');
 const json = require('@rollup/plugin-json');
 const replace = require('@rollup/plugin-replace');
 const builtins = require('builtin-modules');
-const { terser } = require('rollup-plugin-terser');
 const pkg = require('./package.json');
 
 const env = process.env.NODE_ENV;
@@ -36,18 +35,5 @@ const config = {
     commonjs(),
   ],
 };
-
-// if (env === 'production') {
-//   config.plugins.push(
-//     terser({
-//       compress: {
-//         pure_getters: true,
-//         unsafe: true,
-//         unsafe_comps: true,
-//         warnings: false,
-//       },
-//     })
-//   );
-// }
 
 module.exports = config;

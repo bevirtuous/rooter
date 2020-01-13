@@ -27,13 +27,17 @@ function Router({ children, history }) {
   }
 
   useEffect(() => {
-    emitter.addListener(EVENT, (params) => {
+    function handler(params) {
       if (params.action === UPDATE) {
         handleUpdate(params.route);
       } else {
         handleChange(params);
       }
-    });
+    }
+
+    emitter.on(EVENT, handler);
+
+    return emitter.off(EVENT, handler);
   }, []);
 
   useEffect(() => {
