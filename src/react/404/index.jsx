@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import router from '../../core/Router';
 import useHistory from '../useHistory';
 
@@ -11,9 +10,5 @@ function RouteNotFound({ children }) {
 
   return children;
 }
-
-RouteNotFound.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export default RouteNotFound;

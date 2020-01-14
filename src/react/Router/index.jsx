@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import router from '../../core/Router';
 import routeStack from '../../core/Stack';
 import { RouterContext } from '../context';
@@ -55,11 +54,6 @@ function Router({ children, history }) {
     </RouterContext.Provider>
   );
 }
-
-Router.propTypes = {
-  children: PropTypes.node.isRequired,
-  history: PropTypes.func,
-};
 
 Router.defaultProps = {
   history: null,
