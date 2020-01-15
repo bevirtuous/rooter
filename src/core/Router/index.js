@@ -42,7 +42,7 @@ class Router {
     if (next && location.state && location.state.route && next.id === location.state.route.id) {
       this.handlePush({
         pathname: location.pathname,
-        state: location.state,
+        meta: location.state,
       }, false, true);
 
       return;
@@ -74,7 +74,7 @@ class Router {
       emit = true,
       forceNative = false,
       steps = 1,
-      state = null,
+      meta = null,
     } = params;
     let unlisten = null;
 
@@ -89,8 +89,8 @@ class Router {
     const prev = stack.getByIndex(this.currentIndex);
     const next = stack.getByIndex(targetIndex);
 
-    if (state) {
-      next.state = Object.assign(next.state, state);
+    if (meta) {
+      next.meta = Object.assign(next.meta, meta);
     }
 
     const end = { action: constants.POP, prev, next };
@@ -151,7 +151,7 @@ class Router {
       const {
         emit = true,
         pathname,
-        state,
+        meta,
       } = params;
       const pattern = this.findPattern(pathname.split('?')[0]);
       let unlisten = null;
@@ -168,7 +168,7 @@ class Router {
       const next = nativePush ? stack.getByIndex(this.currentIndex + 1) : new Route({
         pathname,
         pattern,
-        state,
+        meta,
       });
 
       if (!nativePush) {
@@ -209,7 +209,7 @@ class Router {
         this.history.push({
           pathname,
           state: {
-            ...state,
+            ...meta,
             route: { id: next.id },
           },
         });
@@ -288,7 +288,7 @@ class Router {
     const {
       emit = true,
       pathname,
-      state,
+      meta,
     } = params;
     const pattern = this.findPattern(pathname.split('?')[0]);
     let unlisten = null;
@@ -304,7 +304,7 @@ class Router {
     const next = new Route({
       pathname,
       pattern,
-      state,
+      meta,
     });
     const end = { action: constants.REPLACE, prev, next };
 
@@ -340,7 +340,7 @@ class Router {
       this.history.replace({
         pathname,
         state: {
-          ...state,
+          ...meta,
           route: { id },
         },
       });
@@ -377,10 +377,10 @@ class Router {
   }
 
   /**
-   * @param {Object} [state=null] The new state of the first route.
+   * @param {Object} [meta=null] The new meta information of the first route.
    * @returns {Promise}
    */
-  reset = (state = null) => new Promise((resolve, reject) => {
+  reset = (meta = null) => new Promise((resolve, reject) => {
     this.nativeEvent = false;
 
     const [, route] = stack.first();
@@ -397,8 +397,8 @@ class Router {
       return;
     }
 
-    if (state) {
-      this.update(route.id, state, false);
+    if (meta) {
+      this.update(route.id, meta, false);
     }
 
     const params = {
@@ -417,10 +417,10 @@ class Router {
 
   /**
    * @param {string} pathname The pathname to reset to.
-   * @param {Object} [state={}] The state of the new route.
+   * @param {Object} [meta={}] The meta of the new route.
    * @returns {Promise}
    */
-  resetTo = (pathname, state = {}) => new Promise((resolve, reject) => {
+  resetTo = (pathname, meta = {}) => new Promise((resolve, reject) => {
     // Missing pathname.
     if (!pathname) {
       reject(new Error(errors.EMISSINGPATHNAME));
@@ -448,7 +448,7 @@ class Router {
     };
 
     this.handlePop(popParams).then(() => {
-      this.handleReplace({ pathname, state, emit: false }).then(() => {
+      this.handleReplace({ pathname, meta, emit: false }).then(() => {
         const [, route] = stack.first();
         const next = {
           action: constants.RESET,
@@ -465,12 +465,12 @@ class Router {
 
   /**
    * @param {string} id The route id to update.
-   * @param {Object} state The new state.
-   * @param {boolean} emit When true, will emit when the state was updated.
+   * @param {Object} meta The new meta.
+   * @param {boolean} emit When true, will emit when the meta was updated.
    * @returns {Promise}
    */
-  update = (id, state = {}, emit = true) => new Promise((resolve, reject) => {
-    if (!id || Object.keys(state).length === 0) {
+  update = (id, meta = {}, emit = true) => new Promise((resolve, reject) => {
+    if (!id || Object.keys(meta).length === 0) {
       reject(new Error(errors.EPARAMSINVALID));
       return;
     }
@@ -482,7 +482,7 @@ class Router {
       return;
     }
 
-    route.state = Object.assign(route.state, state);
+    route.meta = Object.assign(route.meta, meta);
     route.updated = Date.now();
 
     stack.update(id, route);

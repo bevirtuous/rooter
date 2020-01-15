@@ -10,7 +10,7 @@ function setParams(u, match) {
 }
 
 function Route(options) {
-  const { pathname: location, state = {} } = options;
+  const { pathname: location, meta = {} } = options;
   const id = setId();
 
   const splitPath = location.split('#');
@@ -35,11 +35,11 @@ function Route(options) {
     id,
     hash,
     location,
+    meta,
     pathname,
     pattern,
     params,
     query,
-    state,
     created,
     updated,
     setPattern,

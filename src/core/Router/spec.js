@@ -83,7 +83,7 @@ describe('Router', () => {
     it('should resolve correctly', () => {
       const params = {
         pathname: `${pathname1}?s=phrase`,
-        state: {
+        meta: {
           test: 123,
         },
       };
@@ -99,7 +99,7 @@ describe('Router', () => {
 
         expect(route.pathname).toBe(pathname1);
         expect(route.query).toEqual({ s: 'phrase' });
-        expect(route.state).toEqual({ test: 123 });
+        expect(route.meta).toEqual({ test: 123 });
 
         expect(didCallback).toHaveBeenCalledWith({
           action: constants.PUSH,
@@ -227,13 +227,13 @@ describe('Router', () => {
       });
       await router.push({ pathname: '/myroute/789' });
 
-      const state = {
+      const meta = {
         test: 456,
       };
 
-      router.pop({ state }).then(() => {
+      router.pop({ meta }).then(() => {
         const currentRoute = stack.getByIndex(router.currentIndex);
-        expect(currentRoute.state).toEqual(state);
+        expect(currentRoute.meta).toEqual(meta);
         done();
       });
     });
@@ -258,13 +258,13 @@ describe('Router', () => {
 
       router.replace({
         pathname: '/myroute/456',
-        state: { test: 123 },
+        meta: { test: 123 },
       }).then((result) => {
         const [, route] = stack.first();
 
         expect(stack.getAll().size).toBe(1);
         expect(route.pathname).toBe('/myroute/456');
-        expect(route.state).toEqual({ test: 123 });
+        expect(route.meta).toEqual({ test: 123 });
         expect(didCallback).toHaveBeenCalledWith({
           action: constants.REPLACE,
           next: result.next,
@@ -322,12 +322,12 @@ describe('Router', () => {
       emitter.once(constants.EVENT, didCallback);
 
       const prevRoute = stack.getByIndex(router.currentIndex);
-      const state = { reset: true };
+      const meta = { reset: true };
 
-      router.reset(state).then((result) => {
+      router.reset(meta).then((result) => {
         expect(router.history.location.pathname).toBe(pathname1);
         expect(firstRoute).toBe(result.next);
-        expect(result.next.state).toEqual(state);
+        expect(result.next.meta).toEqual(meta);
         expect(prevRoute).toBe(result.prev);
         expect(didCallback).toHaveBeenCalledWith(result);
         done();
@@ -387,12 +387,12 @@ describe('Router', () => {
       const callback = jest.fn();
       emitter.once(constants.EVENT, callback);
 
-      const state = {
+      const meta = {
         test: 123,
       };
 
-      await router.update(id, state);
-      expect(route.state).toEqual(state);
+      await router.update(id, meta);
+      expect(route.meta).toEqual(meta);
       expect(route.updated).toEqual(dateNowSpy());
 
       expect(callback).toHaveBeenCalledWith({
@@ -401,7 +401,7 @@ describe('Router', () => {
       });
 
       await router.update(id, { test: 456 });
-      expect(route.state).toEqual({ test: 456 });
+      expect(route.meta).toEqual({ test: 456 });
     });
 
     it('should reject when id is missing', () => {

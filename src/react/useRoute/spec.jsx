@@ -30,13 +30,13 @@ describe('useRoute()', () => {
       update: expect.any(Function),
     });
 
-    // Ensure that the used context id was updated when a new route was pushed.
-    const newState = {
+    // Ensure that the used context id was updated when a route's meta was updated.
+    const newMeta = {
       hi: 5,
     };
 
-    useRoute1.update(newState);
+    useRoute1.update(newMeta);
 
-    expect(stack.get(useRoute1.id).state).toEqual({ hi: 5 });
+    expect(stack.get(useRoute1.id).meta).toEqual({ hi: 5 });
   });
 });

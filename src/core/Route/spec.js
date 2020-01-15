@@ -8,7 +8,7 @@ describe('Route', () => {
       const route = new Route({
         pathname: '/myroute/123?search=hello#headline',
         pattern: '/myroute/:id',
-        state: {
+        meta: {
           a: 1,
           b: 2,
         },
@@ -20,7 +20,7 @@ describe('Route', () => {
       expect(route.params).toEqual({ id: '123' });
       expect(route.query).toEqual({ search: 'hello' });
       expect(route.hash).toBe('headline');
-      expect(route.state).toEqual({ a: 1, b: 2 });
+      expect(route.meta).toEqual({ a: 1, b: 2 });
       expect(route.created).toEqual(123456789);
       expect(route.updated).toBeNull();
     });
@@ -39,7 +39,7 @@ describe('Route', () => {
       });
 
       expect(route.query).toEqual({});
-      expect(route.state).toEqual({});
+      expect(route.meta).toEqual({});
     });
 
     it('should set hash to be null when missing', () => {
