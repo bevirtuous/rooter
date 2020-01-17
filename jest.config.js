@@ -1,4 +1,5 @@
 module.exports = {
+  coverageReporters: ['json', 'lcovonly', 'text'],
   moduleFileExtensions: ['js', 'jsx', 'json'],
   snapshotSerializers: [
     'enzyme-to-json/serializer',
