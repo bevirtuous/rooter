@@ -55,6 +55,10 @@ describe('Stack', () => {
     it('should return null when no index is given', () => {
       expect(stack.getByIndex()).toBeNull();
     });
+
+    it('should return null when index is larger than stack size', () => {
+      expect(stack.getByIndex(15)).toBeNull();
+    });
   });
 
   describe('getAll()', () => {
