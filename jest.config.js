@@ -1,5 +1,5 @@
 module.exports = {
-  coverageReporters: ['json', 'lcovonly', 'text'],
+  coverageReporters: ['json', 'lcov', 'text'],
   moduleFileExtensions: ['js', 'jsx', 'json'],
   snapshotSerializers: [
     'enzyme-to-json/serializer',
@@ -18,12 +18,7 @@ module.exports = {
     '<rootDir>/node_modules/enzyme/',
   ],
   collectCoverageFrom: [
-    '**/*.{js,jsx}',
-    '!**/node_modules/**',
-    '!**/coverage/**',
-    '!**/babel.config.js',
-    '!**/.eslintrc.js',
-    '!**/jest.config.js',
+    'src/**/*.{js,jsx}',
   ],
   setupFiles: [
     './testSetup.js',
