@@ -293,12 +293,6 @@ class Router {
     const pattern = this.findPattern(pathname.split('?')[0]);
     let unlisten = null;
 
-    if (!pattern) {
-      reject(new Error(errors.EINVALIDPATHNAME));
-      this.nativeEvent = true;
-      return;
-    }
-
     const { id } = stack.getByIndex(this.currentIndex);
     const prev = stack.get(id);
     const next = new Route({
@@ -496,7 +490,8 @@ class Router {
 
   /**
    * @returns {Route}
-   */ getCurrentRoute = () => stack.getByIndex(this.currentIndex)
+   */
+  getCurrentRoute = () => stack.getByIndex(this.currentIndex)
 
   /**
    * Returns the matches pattern for the given pathname.

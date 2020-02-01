@@ -2,7 +2,7 @@ import { createBrowserHistory } from 'history';
 import history from '.';
 
 describe('history', () => {
-  it('should return `createBrowserHistory` for browsers', () => {
+  it('should be a `createBrowserHistory` instance', () => {
     expect(history).toBe(createBrowserHistory);
   });
 });
