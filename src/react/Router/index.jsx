@@ -12,7 +12,7 @@ function Router({ children, history }) {
 
   function handleChange({ prev, next }) {
     setRoutes({
-      prev: prev ? prev.id : null,
+      prev: prev.id,
       next: next.id,
     });
   }

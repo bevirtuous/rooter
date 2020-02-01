@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Route /> should render component 1`] = `
+<Router
+  history={null}
+>
+  <Route
+    path="/myroute/:id"
+  >
+    <div />
+  </Route>
+</Router>
+`;

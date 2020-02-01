@@ -10,7 +10,7 @@ const spy = jest.spyOn(router, 'register');
 
 describe('<Route />', () => {
   it('should render component', () => {
-    mount((
+    const app = mount((
       <Router>
         <Route path={path}>
           <div />
@@ -19,6 +19,7 @@ describe('<Route />', () => {
     ));
 
     expect(spy).toHaveBeenCalledWith(path);
+    expect(app).toMatchSnapshot();
   });
 
   it('should correctly set the RouteContext value', () => {
