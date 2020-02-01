@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import router from '../../core/Router';
-import routeStack from '../../core/Stack';
 import { RouterContext } from '../context';
 import { EVENT, UPDATE } from '../../core/constants';
 import emitter from '../../core/emitter';
@@ -45,11 +44,8 @@ function Router({ children, history }) {
     }
   }, [history]);
 
-  const { prev, next } = routes;
-  const stack = Array.from(routeStack.getAll());
-
   return (
-    <RouterContext.Provider value={{ prev, next, stack }}>
+    <RouterContext.Provider value={routes}>
       {children}
     </RouterContext.Provider>
   );
