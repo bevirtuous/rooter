@@ -499,11 +499,11 @@ class Router {
    * @returns {string|null}
    */
   match = (pathname = null) => {
-    let foundPattern = false;
-
     if (!pathname) {
       return false;
     }
+
+    let foundPattern = false;
 
     Object.entries(this.patterns).some(([pattern, properties]) => {
       if (properties.match(pathname)) {

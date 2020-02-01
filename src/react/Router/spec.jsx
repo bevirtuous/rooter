@@ -13,8 +13,6 @@ describe('<Router />', () => {
       </Router>
     ));
 
-    const child = app.find('p');
-    expect(child.length).toBe(1);
     expect(app).toMatchSnapshot();
   });
 

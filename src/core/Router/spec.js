@@ -79,6 +79,34 @@ describe('Router', () => {
     });
   });
 
+  describe('handleNativeEvent()', () => {
+    it('should natively navigate backwards', async (done) => {
+      await router.push({ pathname: '/somewhere' });
+      await router.push({ pathname: '/somewhere/else' });
+      const spyPop = jest.spyOn(router, 'handlePop');
+
+      router.history.goBack();
+
+      setTimeout(() => {
+        expect(spyPop).toHaveBeenCalledTimes(1);
+        done();
+      }, 500);
+    });
+
+    it('should natively navigate forwards', async (done) => {
+      await router.push({ pathname: '/somewhere' });
+      await router.pop();
+      const spyPush = jest.spyOn(router, 'handlePush');
+
+      router.history.goForward();
+
+      setTimeout(() => {
+        expect(spyPush).toHaveBeenCalledTimes(1);
+        done();
+      }, 500);
+    });
+  });
+
   describe('push()', () => {
     it('should resolve correctly', () => {
       const params = {
