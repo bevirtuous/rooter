@@ -81,8 +81,8 @@ describe('Router', () => {
 
   describe('handleNativeEvent()', () => {
     it('should natively navigate backwards', async (done) => {
-      await router.push({ pathname: '/somewhere' });
-      await router.push({ pathname: '/somewhere/else' });
+      await router.push({ to: '/somewhere' });
+      await router.push({ to: '/somewhere/else' });
       const spyPop = jest.spyOn(router, 'handlePop');
 
       router.history.goBack();
@@ -94,7 +94,7 @@ describe('Router', () => {
     });
 
     it('should natively navigate forwards', async (done) => {
-      await router.push({ pathname: '/somewhere' });
+      await router.push({ to: '/somewhere' });
       await router.pop();
       const spyPush = jest.spyOn(router, 'handlePush');
 
@@ -110,7 +110,7 @@ describe('Router', () => {
   describe('push()', () => {
     it('should resolve correctly', () => {
       const params = {
-        pathname: `${pathname1}?s=phrase`,
+        to: `${pathname1}?s=phrase`,
         meta: {
           test: 123,
         },
@@ -140,13 +140,13 @@ describe('Router', () => {
     });
 
     it('should remove all forward routes from the stack', async () => {
-      await router.push({ pathname: '/myroute/456' });
-      await router.push({ pathname: '/myroute/789' });
+      await router.push({ to: '/myroute/456' });
+      await router.push({ to: '/myroute/789' });
 
       expect(stack.getAll().size).toBe(3);
 
       await router.pop({ steps: 2 });
-      await router.push({ pathname: '/myroute/abc' });
+      await router.push({ to: '/myroute/abc' });
 
       expect(router.currentIndex).toBe(1);
       expect(stack.getAll().size).toBe(2);
@@ -167,7 +167,7 @@ describe('Router', () => {
 
     it('should not emit didPush event', () => {
       const params = {
-        pathname: pathname1,
+        to: pathname1,
         emit: false,
       };
 
@@ -181,7 +181,7 @@ describe('Router', () => {
 
     it('should push when a non-matching pathname was given', (done) => {
       const params = {
-        pathname: '/not-registered',
+        to: '/not-registered',
       };
 
       return router.push(params).then(async ({ next }) => {
@@ -199,7 +199,7 @@ describe('Router', () => {
     it('should resolve correctly', async (done) => {
       const didCallback = jest.fn();
 
-      await router.push({ pathname: '/myroute/456' });
+      await router.push({ to: '/myroute/456' });
 
       emitter.once(constants.EVENT, didCallback);
 
@@ -221,8 +221,8 @@ describe('Router', () => {
     });
 
     it('should pop multiple routes', async (done) => {
-      await router.push({ pathname: '/myroute/456' });
-      await router.push({ pathname: '/myroute/789' });
+      await router.push({ to: '/myroute/456' });
+      await router.push({ to: '/myroute/789' });
 
       router.pop({ steps: 2 }).then((result) => {
         const currentRoute = stack.getByIndex(router.currentIndex);
@@ -232,15 +232,15 @@ describe('Router', () => {
     });
 
     it('should not pop when steps is negative', async () => {
-      await router.push({ pathname: '/myroute/456' });
+      await router.push({ to: '/myroute/456' });
       await router.pop({ steps: -3 }).catch((error) => (
         expect(error).toEqual(new Error(errors.EINVALIDSTEPS))
       ));
     });
 
     it('should clamp when steps is larger than the stack', async (done) => {
-      await router.push({ pathname: '/myroute/456' });
-      await router.push({ pathname: '/myroute/789' });
+      await router.push({ to: '/myroute/456' });
+      await router.push({ to: '/myroute/789' });
 
       return router.pop({ steps: 5 }).then((result) => {
         expect(result.next).toBe(stack.getByIndex(0));
@@ -250,10 +250,10 @@ describe('Router', () => {
 
     it('should merge given state to incoming route', async (done) => {
       await router.push({
-        pathname: '/myroute/456',
+        to: '/myroute/456',
         state: { test: 123 },
       });
-      await router.push({ pathname: '/myroute/789' });
+      await router.push({ to: '/myroute/789' });
 
       const meta = {
         test: 456,
@@ -269,7 +269,7 @@ describe('Router', () => {
     it('should not emit event', async () => {
       const callback = jest.fn();
 
-      await router.push({ pathname: '/myroute/456' });
+      await router.push({ to: '/myroute/456' });
 
       emitter.once(constants.EVENT, callback);
 
@@ -285,7 +285,7 @@ describe('Router', () => {
       emitter.once(constants.EVENT, didCallback);
 
       router.replace({
-        pathname: '/myroute/456',
+        to: '/myroute/456',
         meta: { test: 123 },
       }).then((result) => {
         const [, route] = stack.first();
@@ -316,7 +316,7 @@ describe('Router', () => {
 
     it('should not emit didPush event', () => {
       const params = {
-        pathname: pathname1,
+        to: pathname1,
         emit: false,
       };
 
@@ -330,7 +330,7 @@ describe('Router', () => {
 
     it('should reject when pathname cannot be matched', () => {
       const params = {
-        pathname: pathname1,
+        to: pathname1,
       };
 
       return router.replace(params).catch((error) => (
@@ -344,15 +344,15 @@ describe('Router', () => {
       const [, firstRoute] = stack.first();
       const didCallback = jest.fn();
 
-      router.push({ pathname: '/myroute/456' });
-      router.push({ pathname: '/myroute/789' });
+      router.push({ to: '/myroute/456' });
+      router.push({ to: '/myroute/789' });
 
       emitter.once(constants.EVENT, didCallback);
 
       const prevRoute = stack.getByIndex(router.currentIndex);
       const meta = { reset: true };
 
-      router.reset(meta).then((result) => {
+      router.reset({ meta }).then((result) => {
         expect(router.history.location.pathname).toBe(pathname1);
         expect(firstRoute).toBe(result.next);
         expect(result.next.meta).toEqual(meta);
@@ -371,19 +371,17 @@ describe('Router', () => {
         done();
       });
     });
-  });
 
-  describe('resetTo()', () => {
     it('should correctly reset to the specified route', async (done) => {
       const didCallback = jest.fn();
 
-      await router.push({ pathname: '/myroute/456' });
+      await router.push({ to: '/myroute/456' });
 
       emitter.once(constants.EVENT, didCallback);
 
       const previous = router.getCurrentRoute();
 
-      router.resetTo('/myroute/789').then((result) => {
+      router.reset({ to: '/myroute/789' }).then((result) => {
         const [, route] = stack.first();
         expect(route).toBe(result.next);
         expect(previous).toBe(result.prev);
@@ -395,18 +393,6 @@ describe('Router', () => {
         done();
       });
     });
-
-    it('should not reset when pathname is missing', () => (
-      router.resetTo().catch((error) => (
-        expect(error).toEqual(new Error(errors.EMISSINGPATHNAME))
-      ))
-    ));
-
-    it('should not reset to non-matching pathname', () => (
-      router.resetTo('/invalid/path').catch((error) => (
-        expect(error).toEqual(new Error(errors.EINVALIDPATHNAME))
-      ))
-    ));
   });
 
   describe('update()', () => {

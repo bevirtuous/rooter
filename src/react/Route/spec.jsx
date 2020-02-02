@@ -74,7 +74,7 @@ describe('<Route />', () => {
     expect(route.find(Route).at(0).html()).toBe('<div></div>');
     expect(route.find(Route).at(1).html()).toBeNull();
 
-    await router.push({ pathname: '/other' });
+    await router.push({ to: '/other' });
 
     route.update();
 

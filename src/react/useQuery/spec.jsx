@@ -29,7 +29,7 @@ describe('useQuery()', () => {
       </Router>
     ));
 
-    await router.push({ pathname: '/test?id=123' });
+    await router.push({ to: '/test?id=123' });
     expect(useQuery1).toEqual({ id: '123' });
   });
 });

@@ -7,7 +7,7 @@ describe('rx', () => {
 
     push$.subscribe(callback);
 
-    router.push({ pathname: '/somewhere' })
+    router.push({ to: '/somewhere' })
       .then(({ next, prev }) => {
         expect(callback).toHaveBeenCalledTimes(1);
         expect(callback).toHaveBeenCalledWith({
@@ -41,7 +41,7 @@ describe('rx', () => {
 
     replace$.subscribe(callback);
 
-    router.replace({ pathname: '/somewhere/else' })
+    router.replace({ to: '/somewhere/else' })
       .then(({ next, prev }) => {
         expect(callback).toHaveBeenCalledTimes(1);
         expect(callback).toHaveBeenCalledWith({
@@ -58,7 +58,7 @@ describe('rx', () => {
 
     reset$.subscribe(callback);
 
-    await router.push({ pathname: '/somewhere' });
+    await router.push({ to: '/somewhere' });
     router.reset()
       .then(({ next, prev }) => {
         expect(callback).toHaveBeenCalledTimes(1);

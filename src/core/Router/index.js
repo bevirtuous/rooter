@@ -41,7 +41,7 @@ class Router {
 
     if (next && location.state && location.state.route && next.id === location.state.route.id) {
       this.handlePush({
-        pathname: location.pathname,
+        to: location.pathname,
         meta: location.state,
       }, false, true);
 
@@ -150,10 +150,10 @@ class Router {
 
       const {
         emit = true,
-        pathname,
         meta,
+        to,
       } = params;
-      const pattern = this.findPattern(pathname.split('?')[0]);
+      const pattern = this.findPattern(to.split('?')[0]);
       let unlisten = null;
 
       // Remove all unwanted items from the stack.
@@ -166,7 +166,7 @@ class Router {
 
       const prev = stack.getByIndex(this.currentIndex);
       const next = nativePush ? stack.getByIndex(this.currentIndex + 1) : new Route({
-        pathname,
+        pathname: to,
         pattern,
         meta,
       });
@@ -207,7 +207,7 @@ class Router {
       // Perform the history push action.
       if (!this.nativeEvent) {
         this.history.push({
-          pathname,
+          pathname: to,
           state: {
             ...meta,
             route: { id: next.id },
@@ -249,7 +249,7 @@ class Router {
     };
 
     // Find the pathname of the first route.
-    const [, route] = stack.first();
+    const route = stack.first()[1];
 
     // If it has been set then we don't need to match it.
     if (route.pattern !== null) {
@@ -287,16 +287,16 @@ class Router {
 
     const {
       emit = true,
-      pathname,
+      to,
       meta,
     } = params;
-    const pattern = this.findPattern(pathname.split('?')[0]);
+    const pattern = this.findPattern(to.split('?')[0]);
     let unlisten = null;
 
     const { id } = stack.getByIndex(this.currentIndex);
     const prev = stack.get(id);
     const next = new Route({
-      pathname,
+      pathname: to,
       pattern,
       meta,
     });
@@ -332,7 +332,7 @@ class Router {
     // Perform the history replace action.
     if (!this.nativeEvent) {
       this.history.replace({
-        pathname,
+        pathname: to,
         state: {
           ...meta,
           route: { id },
@@ -371,13 +371,16 @@ class Router {
   }
 
   /**
-   * @param {Object} [meta=null] The new meta information of the first route.
    * @returns {Promise}
    */
-  reset = (meta = null) => new Promise((resolve, reject) => {
-    this.nativeEvent = false;
+  reset = ({ to = null, meta = null } = {}) => new Promise((resolve, reject) => {
+    if (this.currentIndex === 0) {
+      reject();
+      return;
+    }
 
-    const [, route] = stack.first();
+    this.nativeEvent = false;
+    const route = stack.first()[1];
 
     const prev = stack.getByIndex(this.currentIndex);
     const next = {
@@ -385,11 +388,6 @@ class Router {
       prev,
       next: route,
     };
-
-    if (this.currentIndex === 0) {
-      reject();
-      return;
-    }
 
     if (meta) {
       this.update(route.id, meta, false);
@@ -403,58 +401,21 @@ class Router {
 
     this.handlePop(params)
       .then(() => {
-        emitter.emit(constants.EVENT, next);
-        this.nativeEvent = true;
-        resolve(next);
+        if (!to) {
+          emitter.emit(constants.EVENT, next);
+          this.nativeEvent = true;
+          resolve(next);
+          return;
+        }
+
+        this.handleReplace({ to, meta, emit: false }).then(() => {
+          next.next = stack.first()[1];
+
+          this.nativeEvent = true;
+          emitter.emit(constants.EVENT, next);
+          resolve(next);
+        });
       });
-  });
-
-  /**
-   * @param {string} pathname The pathname to reset to.
-   * @param {Object} [meta={}] The meta of the new route.
-   * @returns {Promise}
-   */
-  resetTo = (pathname, meta = {}) => new Promise((resolve, reject) => {
-    // Missing pathname.
-    if (!pathname) {
-      reject(new Error(errors.EMISSINGPATHNAME));
-      return;
-    }
-
-    // Ensure that the pathname matches a registered pattern.
-    if (!this.findPattern(pathname)) {
-      reject(new Error(errors.EINVALIDPATHNAME));
-      return;
-    }
-
-    if (this.currentIndex === 0) {
-      reject();
-      return;
-    }
-
-    this.nativeEvent = false;
-
-    const previous = this.getCurrentRoute();
-    const popParams = {
-      emit: false,
-      forceNative: true,
-      steps: this.currentIndex,
-    };
-
-    this.handlePop(popParams).then(() => {
-      this.handleReplace({ pathname, meta, emit: false }).then(() => {
-        const [, route] = stack.first();
-        const next = {
-          action: constants.RESET,
-          prev: previous,
-          next: route,
-        };
-
-        this.nativeEvent = true;
-        emitter.emit(constants.EVENT, next);
-        resolve(next);
-      });
-    });
   });
 
   /**

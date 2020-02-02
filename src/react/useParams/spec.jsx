@@ -29,7 +29,7 @@ describe('useParams()', () => {
       </Router>
     ));
 
-    await router.push({ pathname: '/test/123' });
+    await router.push({ to: '/test/123' });
     expect(useParams1).toEqual({ id: '123' });
   });
 });

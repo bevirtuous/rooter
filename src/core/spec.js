@@ -7,7 +7,6 @@ describe('Core API', () => {
     expect(history.pop).toBe(router.pop);
     expect(history.replace).toBe(router.replace);
     expect(history.reset).toBe(router.reset);
-    expect(history.resetTo).toBe(router.resetTo);
     expect(history.update).toBe(router.update);
   });
 });
