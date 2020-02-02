@@ -225,7 +225,7 @@ class Router {
    * @returns {string|null}
    */
   findPattern = (pathname) => {
-    const pattern = Object.keys(this.patterns).find((key) => this.patterns[key].match(pathname));
+    const pattern = Object.keys(this.patterns).find((key) => this.patterns[key](pathname));
     return pattern || null;
   }
 
@@ -234,19 +234,9 @@ class Router {
    * @param {string} pattern The pattern to register.
    */
   register = (pattern) => {
-    if (!pattern) {
-      throw new Error(errors.EMISSINGPATTERN);
-    }
-
-    if (typeof pattern !== 'string') {
-      throw new Error(errors.EINVALIDPATTERN);
-    }
-
     const match = matcher(pattern);
 
-    this.patterns[pattern] = {
-      match,
-    };
+    this.patterns[pattern] = match;
 
     // Find the pathname of the first route.
     const route = stack.first()[1];
@@ -466,8 +456,8 @@ class Router {
 
     let foundPattern = false;
 
-    Object.entries(this.patterns).some(([pattern, properties]) => {
-      if (properties.match(pathname)) {
+    Object.entries(this.patterns).some(([pattern, match]) => {
+      if (match(pathname)) {
         foundPattern = pattern;
         return true;
       }

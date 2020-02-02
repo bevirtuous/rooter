@@ -44,21 +44,13 @@ describe('Router', () => {
 
   describe('register()', () => {
     it('should correctly register a pattern with a matching function', () => {
-      expect(typeof router.patterns[pattern1].match).toBe('function');
-    });
-
-    it('should not register with missing pattern', () => {
-      expect(router.register).toThrowError(errors.EMISSINGPATTERN);
-    });
-
-    it('should not register with invalid type', () => {
-      expect(() => router.register(123)).toThrowError(errors.EINVALIDPATTERN);
+      expect(typeof router.patterns[pattern1]).toBe('function');
     });
 
     it('should update initial entry when matching pattern is registered', () => {
       router.constructor();
       router.register(pattern1);
-      const [, route] = stack.first();
+      const route = stack.first()[1];
 
       expect(route.pattern).toEqual(pattern1);
       expect(route.params).toEqual({ id: '123' });
