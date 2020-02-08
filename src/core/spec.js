@@ -8,5 +8,6 @@ describe('Core API', () => {
     expect(history.replace).toBe(router.replace);
     expect(history.reset).toBe(router.reset);
     expect(history.update).toBe(router.update);
+    expect(history.current).toBe(router.getCurrentRoute);
   });
 });
