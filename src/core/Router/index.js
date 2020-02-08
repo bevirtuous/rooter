@@ -293,7 +293,7 @@ class Router {
     const end = { action: constants.REPLACE, prev, next };
 
     // Add item to the stack.
-    stack.add(id, next);
+    stack.add(next.id, next);
 
     /**
      * The history event callback.
@@ -398,8 +398,8 @@ class Router {
           return;
         }
 
-        this.handleReplace({ to, meta, emit: false }).then(() => {
-          next.next = stack.first()[1];
+        this.handleReplace({ to, meta, emit: false }).then((replaced) => {
+          next.next = replaced.next;
 
           this.nativeEvent = true;
           emitter.emit(constants.EVENT, next);

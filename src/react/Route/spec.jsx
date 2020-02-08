@@ -1,4 +1,5 @@
 import React from 'react';
+import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import router from '../../core/Router';
 import Router from '../Router/index';
@@ -74,7 +75,9 @@ describe('<Route />', () => {
     expect(route.find(Route).at(0).html()).toBe('<div></div>');
     expect(route.find(Route).at(1).html()).toBeNull();
 
-    await router.push({ to: '/other' });
+    await act(async () => {
+      await router.push({ to: '/other' });
+    });
 
     route.update();
 

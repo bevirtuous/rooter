@@ -272,25 +272,22 @@ describe('Router', () => {
   });
 
   describe('replace()', () => {
-    it('should replace correctly', (done) => {
+    it('should replace correctly', async () => {
       const didCallback = jest.fn();
       emitter.once(constants.EVENT, didCallback);
 
-      router.replace({
-        to: '/myroute/456',
+      const result = await router.replace({
+        to: '/myroute/789',
         meta: { test: 123 },
-      }).then((result) => {
-        const [, route] = stack.first();
+      });
 
-        expect(stack.getAll().size).toBe(1);
-        expect(route.pathname).toBe('/myroute/456');
-        expect(route.meta).toEqual({ test: 123 });
-        expect(didCallback).toHaveBeenCalledWith({
-          action: constants.REPLACE,
-          next: result.next,
-          prev: result.prev,
-        });
-        done();
+      expect(stack.getAll().size).toBe(2);
+      expect(result.next.pathname).toBe('/myroute/789');
+      expect(result.next.meta).toEqual({ test: 123 });
+      expect(didCallback).toHaveBeenCalledWith({
+        action: constants.REPLACE,
+        next: result.next,
+        prev: result.prev,
       });
     });
 
@@ -371,16 +368,11 @@ describe('Router', () => {
 
       emitter.once(constants.EVENT, didCallback);
 
-      const previous = router.getCurrentRoute();
-
       router.reset({ to: '/myroute/789' }).then((result) => {
-        const [, route] = stack.first();
-        expect(route).toBe(result.next);
-        expect(previous).toBe(result.prev);
-        expect(route.pathname).toBe('/myroute/789');
+        expect(result.prev.pathname).toBe('/myroute/456');
+        expect(result.next.pathname).toBe('/myroute/789');
 
-        // Should contain the newly pushed route and the new first route.
-        expect(stack.getAll().size).toBe(2);
+        expect(stack.getAll().size).toBe(3);
         expect(didCallback).toHaveBeenCalledWith(result);
         done();
       });
