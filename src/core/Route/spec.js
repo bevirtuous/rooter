@@ -24,7 +24,15 @@ describe('Route', () => {
     expect(route.updated).toBeNull();
   });
 
-  it('should set params to be empty when pattern is missing ', () => {
+  it('should trim whitespace from location', () => {
+    const route = new Route({
+      pathname: ' /myroute/123   ',
+    });
+
+    expect(route.pathname).toEqual('/myroute/123');
+  });
+
+  it('should set params to be empty when pattern is missing', () => {
     const route = new Route({
       pathname: '/myroute/123?search=hello',
     });

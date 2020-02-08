@@ -10,7 +10,8 @@ function setParams(u, match) {
 }
 
 function Route(options) {
-  const { pathname: location, meta = {} } = options;
+  const { meta = {} } = options;
+  const location = options.pathname.trim();
   const id = setId();
 
   const splitPath = location.split('#');
