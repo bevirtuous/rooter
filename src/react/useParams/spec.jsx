@@ -1,35 +1,36 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
+import { mount } from 'enzyme';
 import router from '../../core/Router';
 import Router from '../Router';
 import Route from '../Route';
 import useParams from '.';
 
-let useParams1 = null;
-
 /**
  * @returns {null}
  */
 function MyComponent() {
-  useParams1 = useParams();
-  return null;
+  const { id } = useParams();
+  return id;
 }
 
 describe('useParams()', () => {
-  beforeEach(() => {
-    useParams1 = null;
-  });
-
   it('should use the current route params', async () => {
-    render((
+    const app = mount((
       <Router>
-        <Route path="/test/:id">
+        <Route path="/myroute/:id">
           <MyComponent />
         </Route>
       </Router>
     ));
 
-    await router.push({ to: '/test/123' });
-    expect(useParams1).toEqual({ id: '123' });
+    expect(app.html()).toBe('123');
+
+    await act(async () => {
+      await router.push({ to: '/myroute/456' });
+    });
+
+    app.update();
+    expect(app.html()).toBe('456');
   });
 });

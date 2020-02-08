@@ -1,35 +1,36 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
+import { mount } from 'enzyme';
 import router from '../../core/Router';
 import Router from '../Router';
 import Route from '../Route';
 import useQuery from '.';
 
-let useQuery1 = null;
-
 /**
  * @returns {null}
  */
 function MyComponent() {
-  useQuery1 = useQuery();
-  return null;
+  const { hi = null } = useQuery();
+  return hi;
 }
 
 describe('useQuery()', () => {
-  beforeEach(() => {
-    useQuery1 = null;
-  });
-
   it('should use the current route query', async () => {
-    render((
+    const app = mount((
       <Router>
-        <Route path="/test">
+        <Route path="/myroute/:id">
           <MyComponent />
         </Route>
       </Router>
     ));
 
-    await router.push({ to: '/test?id=123' });
-    expect(useQuery1).toEqual({ id: '123' });
+    expect(app.html()).toBe('');
+
+    await act(async () => {
+      await router.push({ to: '/myroute/456?hi=5' });
+    });
+
+    app.update();
+    expect(app.html()).toBe('5');
   });
 });

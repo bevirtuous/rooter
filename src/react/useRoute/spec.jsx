@@ -1,42 +1,37 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
+import { mount } from 'enzyme';
 import router from '../../core/Router';
-import stack from '../../core/Stack';
 import Router from '../Router';
 import Route from '../Route';
 import useRoute from '.';
 
-let useRoute1 = null;
-
+/**
+ * @returns {null}
+ */
 function MyComponent() {
-  useRoute1 = useRoute();
-  return null;
+  const { pathname } = useRoute();
+  return pathname;
 }
 
 describe('useRoute()', () => {
-  it('should use the parent route', () => {
-    render((
+  it('should use the parent route', async () => {
+    const app = mount((
       <Router>
-        <Route path="/myroute/123">
+        <Route path="/myroute/:id">
           <MyComponent />
         </Route>
       </Router>
     ));
 
-    const route = stack.getByIndex(router.currentIndex);
+    expect(app.html()).toBe('/myroute/123');
 
-    expect(useRoute1).toMatchObject({
-      ...route,
-      update: expect.any(Function),
+    await act(async () => {
+      await router.push({ to: '/myroute/456' });
     });
 
-    // Ensure that the used context id was updated when a route's meta was updated.
-    const newMeta = {
-      hi: 5,
-    };
+    app.update();
 
-    useRoute1.update(newMeta);
-
-    expect(stack.get(useRoute1.id).meta).toEqual({ hi: 5 });
+    expect(app.html()).toBe('/myroute/456');
   });
 });
