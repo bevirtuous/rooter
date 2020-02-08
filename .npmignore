@@ -1,5 +1,6 @@
 coverage/
 docs/
+package/
 src/
 .DS_STORE
 .eslintignore
@@ -9,3 +10,4 @@ jest.config.js
 Makefile
 rollup.config.js
 testSetup.js
+*.tgz
