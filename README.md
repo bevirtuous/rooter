@@ -1,4 +1,6 @@
 ![alt text](https://badgen.net/npm/v/rooter "Latest version")
+![alt text](https://badgen.net/travis/bevirtuous/rooter "Build status")
+![alt text](https://badgen.net/coveralls/c/github/bevirtuous/rooter "Code coverage")
 ![alt text](https://badgen.net/npm/license/rooter "MIT License")
 
 ### Rooter is a modern client-side router that gives you the essential building blocks to create complex applications with confidence. With first-class support for [React](), [Svelte]() and [RxJS](), getting started is quick and easy.
