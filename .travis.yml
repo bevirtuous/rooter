@@ -1,7 +1,7 @@
 language: node_js
 node_js:
 - "10"
-script: jest --coverage --coverageReporters=lcov | coveralls
+script: jest --coverage --coverageReporters=text-lcov | coveralls
 branches:
   only:
   - master
