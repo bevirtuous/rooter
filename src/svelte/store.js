@@ -1,11 +1,9 @@
 import { writable } from 'svelte/store';
-import router from '../core/Router';
-import emitter from '../core/emitter';
-import { EVENT, UPDATE } from '../core/constants';
+import { emitter, EVENT, UPDATE } from '../core';
 
 const store = writable({
   previous: null,
-  current: router.getCurrentRoute(),
+  current: null,
 });
 
 emitter.on(EVENT, (payload) => {

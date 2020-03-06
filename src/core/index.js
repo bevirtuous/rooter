@@ -8,3 +8,7 @@ export const history = {
   reset: router.reset,
   update: router.update,
 };
+
+export const register = router.register;
+export * from './constants';
+export { default as emitter } from './emitter';

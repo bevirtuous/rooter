@@ -4,7 +4,7 @@ const commonjs = require('@rollup/plugin-commonjs');
 const json = require('@rollup/plugin-json');
 const replace = require('@rollup/plugin-replace');
 const builtins = require('builtin-modules');
-const svelte = require('rollup-plugin-svelte');
+const copy = require('rollup-plugin-copy');
 const pkg = require('./package.json');
 
 const env = process.env.NODE_ENV;
@@ -14,7 +14,6 @@ const config = {
     core: 'src/core/index.js',
     react: 'src/react/index.js',
     rx: 'src/rx/index.js',
-    svelte: 'src/svelte/index.js',
   },
   output: {
     dir: 'dist',
@@ -23,7 +22,11 @@ const config = {
   },
   external: Object.keys(pkg.peerDependencies || {}).concat(['react-dom', 'svelte']).concat(builtins),
   plugins: [
-    svelte(),
+    copy({
+      targets: [
+        { src: 'src/svelte', dest: 'dist' },
+      ],
+    }),
     babel({
       exclude: 'node_modules/**',
     }),
