@@ -1,1 +1,1 @@
-exports.Route = require('./dist/svelte/index.js').Route;
+export * from './dist/svelte';

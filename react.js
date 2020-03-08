@@ -1,1 +1,1 @@
-module.exports = require('./dist/react.js');
+export * from './dist/react';

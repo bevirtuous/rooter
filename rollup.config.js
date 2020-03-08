@@ -18,7 +18,7 @@ const config = {
   output: {
     dir: 'dist',
     entryFileNames: '[name].js',
-    format: 'cjs',
+    format: 'esm',
   },
   external: Object.keys(pkg.peerDependencies || {}).concat(['react-dom', 'svelte']).concat(builtins),
   plugins: [

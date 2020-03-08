@@ -1,1 +1,1 @@
-module.exports = require('./dist/rx.js');
+export * from './dist/rx';
