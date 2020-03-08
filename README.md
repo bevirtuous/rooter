@@ -33,6 +33,26 @@ There are also a number of hooks available to access router information inside o
 
 ---
 
+#### Svelte
+
+```xml
+import { Route } from 'rooter/svelte';
+
+<Route path="/" component={...} />
+<Route path="/product/:id" component={...} />
+<Route path="/cart" component={...} />
+```
+
+There is also a reactive store that keeps track of the current route for convenience.
+
+```js
+import { current } from 'rooter/svelte';
+
+// This is reactive :)
+$: query = $current.query;
+```
+---
+
 #### RxJS
 
 The `rooter/rx` directory will allow you to import any of the 5 predefined Observables: `history$`, `push$`, `pop$`, `replace$` and `reset$`. More info can be found in the [RxJS section of the docs]().
@@ -44,7 +64,7 @@ import { history$ } from 'rooter/rx';
 
 history$.subscribe(({ action, prev, next }) => {
   if (next.pathname === '/logout') {
-    // Perform side effect
+    // Side effect
   }
 });
 ```
@@ -60,6 +80,6 @@ const logout$ = history$.pipe(
 );
 
 logout$.subscribe(() => {
-  // Perform side effect
+  // Side effect
 });
 ```
