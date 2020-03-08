@@ -1,22 +1,13 @@
 import { writable } from 'svelte/store';
 import { emitter, EVENT, UPDATE } from '../core';
 
-const store = writable({
-  previous: null,
-  current: null,
-});
+const store = writable(null);
 
 emitter.on(EVENT, (payload) => {
   if (payload.action === UPDATE) {
-    store.update((v) => ({
-      ...v,
-      current: payload,
-    }));
+    store.set(payload);
   } else {
-    store.set({
-      current: payload.next,
-      previous: payload.prev ? payload.prev : null,
-    });
+    store.set(payload.next);
   }
 });
 

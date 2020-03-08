@@ -8,6 +8,6 @@
   register(path);
 </script>
 
-{#if $store.current && path === $store.current.pattern}
+{#if $store && path === $store.pattern}
   <svelte:component this={component} />
 {/if}
