@@ -5,7 +5,7 @@ const store = writable({});
 
 emitter.on(EVENT, (payload) => {
   if (payload.action === UPDATE) {
-    store.set(payload);
+    store.set(payload.route);
   } else {
     store.set(payload.next);
   }
