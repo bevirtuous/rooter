@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import { emitter, EVENT, UPDATE } from '../core';
 
-const store = writable(null);
+const store = writable({});
 
 emitter.on(EVENT, (payload) => {
   if (payload.action === UPDATE) {
