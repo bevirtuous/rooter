@@ -23,9 +23,6 @@
   },
   "homepage": "https://github.com/bevirtuous/rooter",
   "license": "MIT",
-  "peerDependencies": {
-    "react": "^16.8.0"
-  },
   "devDependencies": {
     "@babel/core": "^7.7.5",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
@@ -37,6 +34,7 @@
     "@rollup/plugin-json": "^4.0.1",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "@rollup/plugin-replace": "^2.3.0",
+    "@rollup/plugin-virtual": "^2.0.1",
     "@testing-library/react": "^9.4.0",
     "@virtuous/eslint-config": "^2.1.0",
     "babel-core": "^7.0.0-bridge.0",
@@ -54,12 +52,12 @@
     "rollup": "^1.27.13",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-copy": "^3.3.0",
+    "rxjs": "^6.5.4",
     "svelte": "^3.18.2"
   },
   "dependencies": {
     "history": "^4.10.1",
     "path-match": "^1.2.4",
-    "query-string": "^6.9.0",
-    "rxjs": "^6.5.4"
+    "query-string": "^6.9.0"
   }
 }
