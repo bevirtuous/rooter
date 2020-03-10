@@ -17,8 +17,9 @@ interface RouterProps {
 export function Router(props: RouterProps): React.Component<RouterProps>
 
 export function useHistory(): {
-  prev: string | null,
-  next: string | null
+  current: Route | null,
+  currentIndex: number,
+  previous: Route | null,
 }
 
 export function useParams(): {

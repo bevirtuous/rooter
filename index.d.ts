@@ -30,7 +30,6 @@ interface Route {
   query: Query,
   created: number,
   updated: number,
-  setPattern: (pattern: string) => void,
 }
 
 export interface history {
