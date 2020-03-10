@@ -1,4 +1,3 @@
-import * as History from 'history';
 import * as Events from 'events';
 import * as QueryString from 'query-string';
 import * as Core from './dist/core';
