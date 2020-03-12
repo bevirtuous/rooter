@@ -14,12 +14,5 @@ export const history = {
 };
 
 export const register = router.register;
-export {
-  EVENT,
-  PUSH,
-  POP,
-  REPLACE,
-  RESET,
-  UPDATE,
-} from './constants';
+export * from './constants';
 export { default as emitter } from './emitter';

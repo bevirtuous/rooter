@@ -4,7 +4,4 @@ export { default as useHistory } from './useHistory';
 export { default as useParams } from './useParams';
 export { default as useQuery } from './useQuery';
 export { default as useRoute } from './useRoute';
-export {
-  RouteContext,
-  RouterContext,
-} from './context';
+export * from './context';
