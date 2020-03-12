@@ -11,7 +11,6 @@ interface Params {
   to: Url,
   meta?: Meta | null,
   emit?: boolean,
-  forceNative?: boolean,
   steps?: number,
 }
 
@@ -35,9 +34,9 @@ interface Route {
 export interface history {
   back(params: Params): Promise<{ action: 'POP', prev: Route, next: Route }>,
   current(): Route,
-  push(params: Params): Promise<{ prev: Route, next: Route }>,
   go(params: Params): Promise<{ prev: Route, next: Route }>,
   pop(params: Params): Promise<{ action: 'POP', prev: Route, next: Route }>,
+  push(params: Params): Promise<{ prev: Route, next: Route }>,
   replace(params: Params): Promise<{ action: 'REPLACE', prev: Route, next: Route }>,
   reset(params: Params): Promise<Route>,
   setMeta(id: string, meta?: Meta, emit?: boolean): Promise<Route>,
