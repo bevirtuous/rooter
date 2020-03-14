@@ -23,7 +23,15 @@ const config = {
   plugins: [
     copy({
       targets: [
-        { src: 'src/svelte', dest: 'dist' },
+        {
+          src: [
+            'src/svelte/index.js',
+            'src/svelte/store.js',
+            'src/svelte/Link.svelte',
+            'src/svelte/Route.svelte',
+          ],
+          dest: 'dist/svelte',
+        },
       ],
     }),
     babel({

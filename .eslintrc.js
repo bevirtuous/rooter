@@ -4,5 +4,6 @@ module.exports = {
     "linebreak-style": 0,
     "prefer-destructuring": "off",
     "react/prop-types": "off",
+    "react/jsx-props-no-spreading": "off",
   }
 };

@@ -1,6 +1,6 @@
 module.exports = {
   coverageReporters: ['json', 'lcov', 'text'],
-  moduleFileExtensions: ['js', 'jsx', 'json'],
+  moduleFileExtensions: ['js', 'jsx', 'json', 'svelte'],
   snapshotSerializers: [
     'enzyme-to-json/serializer',
   ],
@@ -18,10 +18,14 @@ module.exports = {
     '<rootDir>/node_modules/enzyme/',
   ],
   collectCoverageFrom: [
-    'src/**/*.{js,jsx}',
+    'src/**/*.{js,jsx,svelte}',
   ],
   setupFiles: [
     './testSetup.js',
   ],
   testURL: 'http://localhost/myroute/123',
+  // transform: {
+  //   '^.+\\.svelte$': 'svelte-jester',
+  //   '^.+\\.(js,jsx)$': 'babel-jest',
+  // },
 };
