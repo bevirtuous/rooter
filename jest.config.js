@@ -24,8 +24,4 @@ module.exports = {
     './testSetup.js',
   ],
   testURL: 'http://localhost/myroute/123',
-  // transform: {
-  //   '^.+\\.svelte$': 'svelte-jester',
-  //   '^.+\\.(js,jsx)$': 'babel-jest',
-  // },
 };
