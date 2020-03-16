@@ -1,24 +1,24 @@
 import * as Events from 'events';
 import * as Core from './dist/core';
 
-type Url = string;
+export type Url = string;
 
-interface Meta {
+export interface Meta {
   [key: string]: any
 }
 
-interface Params {
+export interface Params {
   to: Url,
   meta?: Meta | null,
   emit?: boolean,
   steps?: number,
 }
 
-interface Query {
+export interface Query {
   [key: string]: any
 }
 
-interface Route {
+export interface Route {
   id: string,
   hash: string,
   location: string,
@@ -32,15 +32,15 @@ interface Route {
 }
 
 export interface history {
-  back(params: Params): Promise<{ action: 'POP', prev: Route, next: Route }>,
-  current(): Route,
-  go(params: Params): Promise<{ prev: Route, next: Route }>,
-  pop(params: Params): Promise<{ action: 'POP', prev: Route, next: Route }>,
-  push(params: Params): Promise<{ prev: Route, next: Route }>,
-  replace(params: Params): Promise<{ action: 'REPLACE', prev: Route, next: Route }>,
-  reset(params: Params): Promise<Route>,
-  setMeta(id: string, meta?: Meta, emit?: boolean): Promise<Route>,
-  setQuery(input: Query): Promise<{ prev: Route, next: Route }>
+  back: (params: Params) => Promise<{ action: 'POP', prev: Route, next: Route }>,
+  current: () => Route,
+  go: (params: Params) => Promise<{ prev: Route, next: Route }>,
+  pop: (params: Params) => Promise<{ action: 'POP', prev: Route, next: Route }>,
+  push: (params: Params) => Promise<{ prev: Route, next: Route }>,
+  replace: (params: Params) => Promise<{ action: 'REPLACE', prev: Route, next: Route }>,
+  reset: (params: Params) => Promise<Route>,
+  setMeta: (id: string, meta?: Meta, emit?: boolean) => Promise<Route>,
+  setQuery: (input: Query) => Promise<{ prev: Route, next: Route }>
 }
 
 export function register(pattern: string): void;

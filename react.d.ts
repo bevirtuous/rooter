@@ -2,14 +2,14 @@ import * as History from 'history';
 import * as React from 'react';
 import { Route } from './index';
 
-interface RouteProps {
+export interface RouteProps {
   children: React.Node,
   path: string,
 }
 
 export function Route(props: RouteProps): React.Component<RouteProps>
 
-interface RouterProps {
+export interface RouterProps {
   children: React.Node,
   history?: History.History,
 }
