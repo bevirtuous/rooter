@@ -5,7 +5,6 @@ const json = require('@rollup/plugin-json');
 const replace = require('@rollup/plugin-replace');
 const builtins = require('builtin-modules');
 const copy = require('rollup-plugin-copy');
-const pkg = require('./package.json');
 
 const env = process.env.NODE_ENV;
 
@@ -20,11 +19,19 @@ const config = {
     entryFileNames: '[name].js',
     format: 'esm',
   },
-  external: Object.keys(pkg.peerDependencies || {}).concat(['react-dom', 'svelte']).concat(builtins),
+  external: ['react', 'react-dom', 'rxjs', 'rxjs/operators', 'svelte'].concat(builtins),
   plugins: [
     copy({
       targets: [
-        { src: 'src/svelte', dest: 'dist' },
+        {
+          src: [
+            'src/svelte/index.js',
+            'src/svelte/store.js',
+            'src/svelte/Link.svelte',
+            'src/svelte/Route.svelte',
+          ],
+          dest: 'dist/svelte',
+        },
       ],
     }),
     babel({
