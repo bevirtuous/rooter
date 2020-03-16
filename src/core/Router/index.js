@@ -295,6 +295,9 @@ class Router {
     // Add item to the stack.
     stack.add(next.id, next);
 
+    // Remove item being replaced.
+    stack.remove(id);
+
     /**
      * The history event callback.
      */
