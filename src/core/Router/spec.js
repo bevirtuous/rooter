@@ -281,7 +281,8 @@ describe('Router', () => {
         meta: { test: 123 },
       });
 
-      expect(stack.getAll().size).toBe(2);
+      expect(stack.getAll().size).toBe(1);
+      expect(result.prev.pathname).toBe('/myroute/456');
       expect(result.next.pathname).toBe('/myroute/789');
       expect(result.next.meta).toEqual({ test: 123 });
       expect(didCallback).toHaveBeenCalledWith({
@@ -353,6 +354,7 @@ describe('Router', () => {
 
     it('should not reset when there is only one route', (done) => {
       const didCallback = jest.fn();
+
       emitter.once(constants.EVENT, didCallback);
 
       router.reset().catch(() => {
@@ -372,7 +374,7 @@ describe('Router', () => {
         expect(result.prev.pathname).toBe('/myroute/456');
         expect(result.next.pathname).toBe('/myroute/789');
 
-        expect(stack.getAll().size).toBe(3);
+        expect(stack.getAll().size).toBe(2);
         expect(didCallback).toHaveBeenCalledWith(result);
         done();
       });
