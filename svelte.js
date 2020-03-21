@@ -1,1 +1,4 @@
-export * from './dist/svelte';
+export {
+  Route,
+  current,
+} from './dist/svelte';
