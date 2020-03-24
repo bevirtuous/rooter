@@ -1,38 +1,34 @@
 import * as History from 'history';
 import * as React from 'react';
-import { Route } from './index';
+import { Route as RouteType, ObjectType } from './index';
 
 export interface RouteProps {
-  children: React.Node,
+  children: React.ReactNode,
   path: string,
 }
 
-export function Route(props: RouteProps): React.Component<RouteProps>
+export function Route(props: RouteProps): JSX.Element;
 
 export interface RouterProps {
-  children: React.Node,
+  children: React.ReactNode,
   history?: History.History,
 }
 
-export function Router(props: RouterProps): React.Component<RouterProps>
+export function Router(props: RouterProps): JSX.Element;
 
 export function useHistory(): {
-  current: Route | null,
+  current: RouteType | null,
   currentIndex: number,
-  previous: Route | null,
+  previous: RouteType | null,
 }
 
-export function useParams(): {
-  [key: string]: any
-}
+export function useParams(): ObjectType
 
-export function useQuery(): {
-  [key: string]: any
-}
+export function useQuery(): ObjectType
 
-export function useRoute(): Route
+export function useRoute(): RouteType
 
-export const RouteContext: React.Context<Route>
+export const RouteContext: React.Context<RouteType>
 
 export const RouterContext: React.Context<{
   prev: string | null,
