@@ -1,5 +1,4 @@
 import * as Events from 'events';
-import * as Core from './dist/core';
 
 export type Url = string;
 
@@ -37,7 +36,7 @@ interface RouterHistory {
   push(params: Params): Promise<{ prev: Route, next: Route }>,
   replace(params: Params): Promise<{ action: 'REPLACE', prev: Route, next: Route }>,
   reset(params: Params): Promise<Route>,
-  setMeta(id: string, meta?: Meta, emit?: boolean): Promise<Route>,
+  setMeta(id: string, meta?: ObjectType, emit?: boolean): Promise<Route>,
   setQuery(input: Query): Promise<{ prev: Route, next: Route }>
 }
 
@@ -45,11 +44,11 @@ export const history: RouterHistory;
 
 export function register(pattern: string): void;
 
-export const EVENT: typeof Core.EVENT;
-export const PUSH: typeof Core.PUSH;
-export const POP: typeof Core.POP;
-export const REPLACE: typeof Core.REPLACE;
-export const RESET: typeof Core.RESET;
-export const UPDATE: typeof Core.UPDATE;
+export const EVENT: 'rooter';
+export const PUSH: 'PUSH';
+export const POP: typeof 'POP';
+export const REPLACE: typeof 'REPLACE';
+export const RESET: typeof 'RESET';
+export const UPDATE: typeof 'UPDATE';
 
 export const emitter: Events.EventEmitter;

@@ -54,6 +54,7 @@
     "svelte": "^3.18.2"
   },
   "dependencies": {
+    "@types/history": "^4.7.5",
     "history": "^4.10.1",
     "path-match": "^1.2.4",
     "query-string": "^6.9.0"

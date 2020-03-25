@@ -3,4 +3,4 @@ clean:
 		find . -name "*debug.log" -type f -delete
 		rm -rf ./node_modules/
 		rm -rf ./dist/
-		yarn install
+		npm install
