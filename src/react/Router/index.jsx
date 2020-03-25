@@ -7,20 +7,20 @@ import emitter from '../../core/emitter';
 function Router({ children, history }) {
   const [routes, setRoutes] = useState({
     prev: null,
-    next: router.getCurrentRoute().id,
+    next: router.getCurrentRoute(),
   });
 
   function handleChange({ prev, next }) {
     setRoutes({
-      prev: prev.id,
-      next: next.id,
+      prev,
+      next,
     });
   }
 
   function handleUpdate(next) {
     setRoutes((old) => ({
       prev: old.prev,
-      next: next.id,
+      next,
     }));
   }
 

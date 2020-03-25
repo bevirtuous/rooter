@@ -5,7 +5,7 @@ import { RouteContext } from '../context';
 import useHistory from '../useHistory';
 
 function Route({ children, path }) {
-  const { current: route } = useHistory();
+  const { current } = useHistory();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -16,14 +16,14 @@ function Route({ children, path }) {
     router.register(path);
   }
 
-  if (route.pattern !== path) {
+  if (current.pattern !== path) {
     return null;
   }
 
-  const key = `${route.id}-${route.pathname}`;
+  const key = `${current.id}-${current.pathname}`;
 
   return (
-    <RouteContext.Provider key={key} value={route}>
+    <RouteContext.Provider key={key} value={current}>
       {children}
     </RouteContext.Provider>
   );
