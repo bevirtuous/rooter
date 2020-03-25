@@ -46,9 +46,9 @@ export function register(pattern: string): void;
 
 export const EVENT: 'rooter';
 export const PUSH: 'PUSH';
-export const POP: typeof 'POP';
-export const REPLACE: typeof 'REPLACE';
-export const RESET: typeof 'RESET';
-export const UPDATE: typeof 'UPDATE';
+export const POP: 'POP';
+export const REPLACE: 'REPLACE';
+export const RESET: 'RESET';
+export const UPDATE: 'UPDATE';
 
 export const emitter: Events.EventEmitter;
