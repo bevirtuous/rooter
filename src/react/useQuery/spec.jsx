@@ -10,7 +10,7 @@ import useQuery from '.';
  * @returns {null}
  */
 function MyComponent() {
-  const { hi = null } = useQuery();
+  const [{ hi = null }] = useQuery();
   return hi;
 }
 

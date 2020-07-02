@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { RouteContext } from '../context';
+import setQuery from '../../core/setQuery';
 
-/**
- * @returns {Object}
- */
 function useQuery() {
-  return useContext(RouteContext).query;
+  const { query } = useContext(RouteContext);
+
+  return [query, setQuery];
 }
 
 export default useQuery;
