@@ -86,7 +86,9 @@ describe('Router', () => {
     });
 
     it('should natively navigate forwards', async (done) => {
-      await router.push({ to: '/somewhere' });
+      const url = '/somewhere?hi=123#what';
+
+      await router.push({ to: url });
       await router.pop();
       const spyPush = jest.spyOn(router, 'handlePush');
 
@@ -94,6 +96,7 @@ describe('Router', () => {
 
       setTimeout(() => {
         expect(spyPush).toHaveBeenCalledTimes(1);
+        expect(router.getCurrentRoute().location).toEqual(url);
         done();
       }, 500);
     });

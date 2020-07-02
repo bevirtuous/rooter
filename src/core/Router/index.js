@@ -41,7 +41,7 @@ class Router {
 
     if (next && location.state && location.state.route && next.id === location.state.route.id) {
       this.handlePush({
-        to: location.pathname,
+        to: next.location,
         meta: location.state,
       }, false, true);
 
