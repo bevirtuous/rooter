@@ -1,6 +1,6 @@
 {
   "name": "rooter",
-  "version": "1.0.0-beta.18",
+  "version": "1.0.0-beta.20",
   "description": "",
   "scripts": {
     "start": "NODE_ENV=development rollup -c -w",
@@ -56,7 +56,7 @@
   "dependencies": {
     "@types/history": "^4.7.5",
     "history": "^4.10.1",
-    "path-match": "^1.2.4",
+    "path-to-regexp": "^1.8.0",
     "query-string": "^6.9.0"
   }
 }
