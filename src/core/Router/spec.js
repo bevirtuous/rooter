@@ -215,6 +215,19 @@ describe('Router', () => {
       });
     });
 
+    it('should update meta info when popping', async (done) => {
+      await router.push({ to: '/myroute/456', meta: { hi: '123' } });
+      await router.push({ to: '/myroute/789' });
+
+      router.pop({ meta: { ho: '456' } }).then((result) => {
+        expect(result.next.meta).toEqual({
+          hi: '123',
+          ho: '456',
+        });
+        done();
+      });
+    });
+
     it('should pop multiple routes', async (done) => {
       await router.push({ to: '/myroute/456' });
       await router.push({ to: '/myroute/789' });
