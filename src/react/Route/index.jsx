@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import router from '../../core/Router';
-import RouteNotFound from '../404';
 import { RouteContext } from '../context';
 import useHistory from '../useHistory';
 
@@ -28,7 +27,5 @@ function Route({ children, path }) {
     </RouteContext.Provider>
   );
 }
-
-Route.NotFound = RouteNotFound;
 
 export default Route;
