@@ -1,4 +1,4 @@
 export {
   Route,
   current,
-} from './dist/svelte';
+} from './esm/svelte';

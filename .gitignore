@@ -44,4 +44,5 @@ package/
 .env
 
 # Project
-dist/
+cjs/
+esm/

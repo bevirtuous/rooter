@@ -4,4 +4,4 @@ export {
   pop$,
   replace$,
   reset$,
-} from './dist/rx';
+} from './esm/rx';

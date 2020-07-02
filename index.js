@@ -8,4 +8,4 @@ export {
   RESET,
   UPDATE,
   emitter,
-} from './dist/core';
+} from './esm/index';

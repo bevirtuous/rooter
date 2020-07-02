@@ -7,7 +7,6 @@ module.exports = {
   testRegex: '(/__tests__/.*|(\\.|/)spec)\\.(js|jsx)?$',
   testPathIgnorePatterns: [
     '/node_modules/',
-    '/dist/',
     '/coverage/',
   ],
   transformIgnorePatterns: [

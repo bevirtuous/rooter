@@ -7,4 +7,4 @@ export {
   useRoute,
   RouteContext,
   RouterContext,
-} from './dist/react';
+} from './esm/react';
