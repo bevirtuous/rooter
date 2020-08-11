@@ -1,6 +1,6 @@
 {
   "name": "rooter",
-  "version": "1.0.0-beta.23",
+  "version": "1.0.0-beta.27",
   "description": "",
   "scripts": {
     "start": "NODE_ENV=development rollup -c -w",
@@ -12,6 +12,9 @@
   "main": "cjs/index.js",
   "module": "esm/index.js",
   "files": [
+    "react.js",
+    "rx.js",
+    "svelte.js",
     "cjs/*",
     "esm/*"
   ],

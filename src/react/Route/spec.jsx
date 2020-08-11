@@ -35,12 +35,43 @@ describe('<Route />', () => {
     expect(app).toMatchSnapshot();
   });
 
+  it('should support nested Routes', async () => {
+    await act(async () => {
+      await router.push({ to: '/' });
+    });
+
+    const app = mount((
+      <Router>
+        <Route path="/">
+          <div>Hello App.</div>
+        </Route>
+        <Route path={path}>
+          <div>Hello World.</div>
+          <Route path="/okay">
+            <div>Hello Again.</div>
+          </Route>
+        </Route>
+      </Router>
+    ));
+
+    expect(app).toMatchSnapshot();
+
+    await act(async () => {
+      await router.push({ to: '/myroute/123/okay' });
+    });
+
+    app.update();
+
+    expect(app).toMatchSnapshot();
+  });
+
   it('should correctly set the RouteContext value', () => {
     let contextValue = null;
     const current = router.getCurrentRoute();
     const expected = {
       ...current,
       params: { id: '123' },
+      pattern: '/myroute/:id',
     };
 
     const MyComponent = () => (

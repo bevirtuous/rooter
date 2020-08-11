@@ -28,3 +28,44 @@ exports[`<Route /> should support children 1`] = `
   </Route>
 </Router>
 `;
+
+exports[`<Route /> should support nested Routes 1`] = `
+<Router
+  history={null}
+>
+  <Route
+    path="/"
+  >
+    <div>
+      Hello App.
+    </div>
+  </Route>
+  <Route
+    path="/myroute/:id"
+  />
+</Router>
+`;
+
+exports[`<Route /> should support nested Routes 2`] = `
+<Router
+  history={null}
+>
+  <Route
+    path="/"
+  />
+  <Route
+    path="/myroute/:id"
+  >
+    <div>
+      Hello World.
+    </div>
+    <Route
+      path="/okay"
+    >
+      <div>
+        Hello Again.
+      </div>
+    </Route>
+  </Route>
+</Router>
+`;

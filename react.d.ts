@@ -4,6 +4,7 @@ import { Route as RouteType, ObjectType } from './index';
 
 export interface RouteProps {
   children: React.ReactNode,
+  component: React.ComponentType,
   path: string,
 }
 
@@ -17,7 +18,7 @@ export interface RouterProps {
 export function Router(props: RouterProps): JSX.Element;
 
 export function useHistory(): {
-  current: RouteType | null,
+  current: RouteType,
   currentIndex: number,
   previous: RouteType | null,
 }

@@ -21,7 +21,6 @@ export interface Route {
   location: string;
   meta?: ObjectType | null;
   pathname: string;
-  params: ObjectType;
   query: Query;
   created: number;
   updated: number;

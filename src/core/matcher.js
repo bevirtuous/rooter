@@ -8,42 +8,40 @@ function decodeParam(param) {
   }
 }
 
-function pathMatch(options = {}) {
-  return (path) => {
-    const keys = [];
-    const regex = pathToRegexp(path, keys, options);
+function pathMatch(path, customOptions = {}) {
+  const options = {
+    sensitive: false,
+    strict: false,
+    end: false,
+    ...customOptions,
+  };
 
-    return (pathname, params = {}) => {
-      const match = regex.exec(pathname);
-      const nextParams = { ...params };
+  const keys = [];
+  const regex = pathToRegexp(path, keys, options);
 
-      if (!match) {
-        return false;
-      }
+  return (pathname, params = {}) => {
+    const match = regex.exec(pathname);
+    const nextParams = { ...params };
 
-      let key;
-      let param;
+    if (!match) {
+      return false;
+    }
 
-      for (let i = 0; i < keys.length; i += 1) {
-        key = keys[i];
-        param = match[i + 1];
+    for (let i = 0; i < keys.length; i += 1) {
+      const key = keys[i];
+      const param = match[i + 1];
 
-        if (param) {
-          nextParams[key.name] = decodeParam(param);
+      if (param) {
+        nextParams[key.name] = decodeParam(param);
 
-          if (key.repeat) {
-            nextParams[key.name] = params[key.name].split(key.delimiter);
-          }
+        if (key.repeat) {
+          nextParams[key.name] = params[key.name].split(key.delimiter);
         }
       }
+    }
 
-      return nextParams;
-    };
+    return nextParams;
   };
 }
 
-export default pathMatch({
-  sensitive: false,
-  strict: false,
-  end: true,
-});
+export default pathMatch;

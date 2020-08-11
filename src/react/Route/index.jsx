@@ -2,11 +2,16 @@ import React, { useState } from 'react';
 import { RouteContext } from '../context';
 import matcher from '../../core/matcher';
 import useHistory from '../useHistory';
+import useRoute from '../useRoute';
 
 function Route({ children, component: Component, path }) {
-  const [matchFn] = useState(() => matcher(path));
   const { current } = useHistory();
-
+  const parent = useRoute();
+  const pattern = (parent ? parent.pattern : '') + path;
+  const matchOptions = {
+    end: path === '/',
+  };
+  const [matchFn] = useState(() => matcher(pattern, matchOptions));
   const match = matchFn(current.pathname);
 
   if (!match) {
@@ -16,6 +21,7 @@ function Route({ children, component: Component, path }) {
   const contextValue = {
     ...current,
     params: match,
+    pattern,
   };
 
   return (
