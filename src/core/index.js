@@ -13,7 +13,6 @@ export const history = {
   setQuery,
 };
 
-export const register = router.register;
 export {
   EVENT,
   PUSH,

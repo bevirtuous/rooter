@@ -5,9 +5,26 @@ exports[`<Route /> should render component 1`] = `
   history={null}
 >
   <Route
+    component={[Function]}
     path="/myroute/:id"
   >
-    <div />
+    <component>
+      <div />
+    </component>
+  </Route>
+</Router>
+`;
+
+exports[`<Route /> should support children 1`] = `
+<Router
+  history={null}
+>
+  <Route
+    path="/myroute/:id"
+  >
+    <div>
+      Hello World.
+    </div>
   </Route>
 </Router>
 `;

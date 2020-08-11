@@ -7,25 +7,41 @@ import { RouteContext } from '../context';
 import Route from './index';
 
 const path = '/myroute/:id';
-const spy = jest.spyOn(router, 'register');
 
 describe('<Route />', () => {
+  beforeEach(() => {
+    jest.resetModules();
+  });
+
   it('should render component', () => {
     const app = mount((
       <Router>
+        <Route path={path} component={() => <div />} />
+      </Router>
+    ));
+
+    expect(app).toMatchSnapshot();
+  });
+
+  it('should support children', () => {
+    const app = mount((
+      <Router>
         <Route path={path}>
-          <div />
+          <div>Hello World.</div>
         </Route>
       </Router>
     ));
 
-    expect(spy).toHaveBeenCalledWith(path);
     expect(app).toMatchSnapshot();
   });
 
   it('should correctly set the RouteContext value', () => {
     let contextValue = null;
     const current = router.getCurrentRoute();
+    const expected = {
+      ...current,
+      params: { id: '123' },
+    };
 
     const MyComponent = () => (
       <RouteContext.Consumer>
@@ -38,21 +54,17 @@ describe('<Route />', () => {
 
     mount((
       <Router>
-        <Route path={path}>
-          <MyComponent />
-        </Route>
+        <Route path={path} component={MyComponent} />
       </Router>
     ));
 
-    expect(current).toMatchObject(contextValue);
+    expect(expected).toMatchObject(contextValue);
   });
 
   it('should render null when does not match current route', () => {
     const route = mount((
       <Router>
-        <Route path="/wrong">
-          <div />
-        </Route>
+        <Route path="/wrong" component={() => <div />} />
       </Router>
     ));
 
@@ -62,12 +74,8 @@ describe('<Route />', () => {
   it('should react to router events and update', async () => {
     const route = mount((
       <Router>
-        <Route path={path}>
-          <div />
-        </Route>
-        <Route path="/other">
-          <div />
-        </Route>
+        <Route path={path} component={() => <div />} />
+        <Route path="/other" component={() => <div />} />
       </Router>
     ));
 

@@ -6,7 +6,6 @@ describe('Route', () => {
   it('should correctly initialise', () => {
     const route = new Route({
       pathname: '/myroute/123?search=hello#headline',
-      pattern: '/myroute/:id',
       meta: {
         a: 1,
         b: 2,
@@ -15,8 +14,6 @@ describe('Route', () => {
 
     expect(route.location).toBe('/myroute/123?search=hello#headline');
     expect(route.pathname).toBe('/myroute/123');
-    expect(route.pattern).toBe('/myroute/:id');
-    expect(route.params).toEqual({ id: '123' });
     expect(route.query).toEqual({ search: 'hello' });
     expect(route.hash).toBe('headline');
     expect(route.meta).toEqual({ a: 1, b: 2 });
@@ -26,18 +23,10 @@ describe('Route', () => {
 
   it('should trim whitespace from location', () => {
     const route = new Route({
-      pathname: ' /myroute/123   ',
+      pathname: ' /myroute/123',
     });
 
     expect(route.pathname).toEqual('/myroute/123');
-  });
-
-  it('should set params to be empty when pattern is missing', () => {
-    const route = new Route({
-      pathname: '/myroute/123?search=hello',
-    });
-
-    expect(route.params).toEqual({});
   });
 
   it('should set query and state to be empty when missing', () => {

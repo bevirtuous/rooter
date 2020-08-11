@@ -2,7 +2,6 @@ import Route from '../Route';
 import * as errors from './errors';
 import emitter from '../emitter';
 import history from '../history';
-import matcher from '../matcher';
 import stack from '../Stack';
 import * as constants from '../constants';
 
@@ -12,9 +11,6 @@ class Router {
     this.nativeEvent = true;
 
     this.history = createHistory();
-
-    // The patterns are collected to match against pathnames.
-    this.patterns = {};
 
     // The `currentIndex` is used to track which stack entry is the current route.
     this.currentIndex = 0;
@@ -153,7 +149,6 @@ class Router {
         meta,
         to,
       } = params;
-      const pattern = this.findPattern(to.split('?')[0]);
       let unlisten = null;
 
       // Remove all unwanted items from the stack.
@@ -167,7 +162,6 @@ class Router {
       const prev = stack.getByIndex(this.currentIndex);
       const next = nativePush ? stack.getByIndex(this.currentIndex + 1) : new Route({
         pathname: to,
-        pattern,
         meta,
       });
 
@@ -219,47 +213,6 @@ class Router {
     });
   }
 
-  /**
-   * Match the given pathname to a registered pattern.
-   * @param {string} pathname The pathname to match.
-   * @returns {string|null}
-   */
-  findPattern = (pathname) => {
-    const pattern = Object.keys(this.patterns).find((key) => this.patterns[key](pathname));
-    return pattern || null;
-  }
-
-  /**
-   * Registers a route pattern to match new pathnames against.
-   * @param {string} pattern The pattern to register.
-   */
-  register = (pattern) => {
-    const match = matcher(pattern);
-
-    this.patterns[pattern] = match;
-
-    // Find the pathname of the first route.
-    const route = stack.first()[1];
-
-    // If it has been set then we don't need to match it.
-    if (route.pattern !== null) {
-      return;
-    }
-
-    //
-    if (match(route.pathname)) {
-      route.setPattern(pattern);
-
-      const next = { action: constants.PUSH, prev: null, next: route };
-
-      emitter.emit(constants.EVENT, next, true);
-    }
-  }
-
-  deregister = (pattern) => {
-    delete this.patterns[pattern];
-  }
-
   handleReplace = (params) => new Promise((resolve, reject) => {
     // Check for missing parameters.
     if (!params) {
@@ -280,14 +233,12 @@ class Router {
       to,
       meta,
     } = params;
-    const pattern = this.findPattern(to.split('?')[0]);
     let unlisten = null;
 
     const { id } = stack.getByIndex(this.currentIndex);
     const prev = stack.get(id);
     const next = new Route({
       pathname: to,
-      pattern,
       meta,
     });
     const end = { action: constants.REPLACE, prev, next };
@@ -446,30 +397,6 @@ class Router {
    * @returns {Route}
    */
   getCurrentRoute = () => stack.getByIndex(this.currentIndex)
-
-  /**
-   * Returns the matches pattern for the given pathname.
-   * @param {string} pathname The pathname to match.
-   * @returns {string|null}
-   */
-  match = (pathname = null) => {
-    if (!pathname) {
-      return false;
-    }
-
-    let foundPattern = false;
-
-    Object.entries(this.patterns).some(([pattern, match]) => {
-      if (match(pathname)) {
-        foundPattern = pattern;
-        return true;
-      }
-
-      return false;
-    });
-
-    return foundPattern;
-  }
 }
 
 export default new Router();

@@ -12,7 +12,6 @@ describe('Router', () => {
   beforeEach(() => {
     stack.clear();
     router.constructor();
-    router.register(pattern1);
   });
 
   describe('constructor()', () => {
@@ -31,7 +30,6 @@ describe('Router', () => {
 
       router.constructor();
       const { history: newHistory } = router;
-      router.register(pattern1);
 
       // Get the new first id.
       const [newId] = stack.first();
@@ -39,35 +37,6 @@ describe('Router', () => {
       expect(history).not.toEqual(newHistory);
       expect(stack.getAll().size).toBe(1);
       expect(id).not.toBe(newId);
-    });
-  });
-
-  describe('register()', () => {
-    it('should correctly register a pattern with a matching function', () => {
-      expect(typeof router.patterns[pattern1]).toBe('function');
-    });
-
-    it('should update initial entry when matching pattern is registered', () => {
-      router.constructor();
-      router.register(pattern1);
-      const route = stack.first()[1];
-
-      expect(route.pattern).toEqual(pattern1);
-      expect(route.params).toEqual({ id: '123' });
-    });
-  });
-
-  describe('deregister()', () => {
-    it('should correctly deregister a pattern with', () => {
-      router.register('/test');
-      router.register('/test2');
-      router.register('/test3');
-
-      router.deregister('/test2');
-
-      expect(router.patterns['/test']).toBeTruthy();
-      expect(router.patterns['/test2']).toBeFalsy();
-      expect(router.patterns['/test3']).toBeTruthy();
     });
   });
 
@@ -181,7 +150,6 @@ describe('Router', () => {
 
       return router.push(params).then(async ({ next }) => {
         expect(next.pathname).toBe('/not-registered');
-        expect(next.pattern).toBeNull();
 
         // Pop to remove the non-matching route for the next set of tests.
         await router.pop();
@@ -442,20 +410,6 @@ describe('Router', () => {
       router.update(12345, { test: 123 }).catch((error) => (
         expect(error).toEqual(new Error(errors.EINVALIDID))
       ));
-    });
-  });
-
-  describe('match()', () => {
-    it('should match a pathname correctly', () => {
-      expect(router.match('/myroute/123')).toBe(pattern1);
-    });
-
-    it('should not match a stranger pathname', () => {
-      expect(router.match('/test/123')).toBe(false);
-    });
-
-    it('should not match when no pathname is given', () => {
-      expect(router.match()).toBe(false);
     });
   });
 });

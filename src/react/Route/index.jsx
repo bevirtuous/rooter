@@ -1,29 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import router from '../../core/Router';
+import React, { useState } from 'react';
 import { RouteContext } from '../context';
+import matcher from '../../core/matcher';
 import useHistory from '../useHistory';
 
-function Route({ children, path }) {
+function Route({ children, component: Component, path }) {
+  const [matchFn] = useState(() => matcher(path));
   const { current } = useHistory();
-  const [ready, setReady] = useState(false);
 
-  useEffect(() => {
-    setReady(true);
-  }, []);
+  const match = matchFn(current.pathname);
 
-  if (!ready) {
-    router.register(path);
-  }
-
-  if (current.pattern !== path) {
+  if (!match) {
     return null;
   }
 
-  const key = `${current.id}-${current.pathname}`;
+  const contextValue = {
+    ...current,
+    params: match,
+  };
 
   return (
-    <RouteContext.Provider key={key} value={current}>
-      {children}
+    <RouteContext.Provider key={current.id} value={contextValue}>
+      {children || <Component />}
     </RouteContext.Provider>
   );
 }
