@@ -21,7 +21,6 @@ export interface Route {
   location: string;
   meta?: ObjectType | null;
   pathname: string;
-  pattern: string;
   params: ObjectType;
   query: Query;
   created: number;
@@ -41,8 +40,6 @@ interface RouterHistory {
 }
 
 export const history: RouterHistory;
-
-export function register(pattern: string): void;
 
 export const EVENT: 'rooter';
 export const PUSH: 'PUSH';
