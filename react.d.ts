@@ -8,6 +8,11 @@ export interface RouteProps {
   path: string,
 }
 
+export interface RouteTypeExtended extends RouteType {
+  params: ObjectType,
+  pattern: string;
+}
+
 export function Route(props: RouteProps): JSX.Element;
 
 export interface RouterProps {
@@ -18,20 +23,20 @@ export interface RouterProps {
 export function Router(props: RouterProps): JSX.Element;
 
 export function useHistory(): {
-  current: RouteType,
+  current: RouteTypeExtended,
   currentIndex: number,
-  previous: RouteType | null,
+  previous: RouteTypeExtended | null,
 }
 
 export function useParams(): ObjectType
 
 export function useQuery(): ObjectType
 
-export function useRoute(): RouteType
+export function useRoute(): RouteTypeExtended
 
-export const RouteContext: React.Context<RouteType>
+export const RouteContext: React.Context<RouteTypeExtended>
 
 export const RouterContext: React.Context<{
-  prev: string | null,
-  next: string | null
+  prev: RouteType | null,
+  next: RouteType
 }>

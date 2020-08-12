@@ -15,8 +15,6 @@ class Router {
     // The `currentIndex` is used to track which stack entry is the current route.
     this.currentIndex = 0;
 
-    this.action = constants.PUSH;
-
     // Unsubscribe to any other history module changes.
     if (typeof this.historyListener === 'function') {
       this.historyListener();
@@ -28,7 +26,7 @@ class Router {
     this.historyListener = this.history.listen(this.handleNativeEvent);
   }
 
-  handleNativeEvent = (location, action) => {
+  handleNativeEvent = ({ location, action }) => {
     if (!this.nativeEvent) {
       return;
     }
@@ -97,7 +95,6 @@ class Router {
     const callback = () => {
       unlisten();
       this.currentIndex = targetIndex;
-      this.action = constants.POP;
 
       if (emit) {
         emitter.emit(constants.EVENT, end);
@@ -180,8 +177,6 @@ class Router {
         // Increment the route index.
         this.currentIndex += 1;
 
-        this.action = constants.PUSH;
-
         // Emit completion event.
         if (emit) {
           emitter.emit(constants.EVENT, { action: constants.PUSH, prev, next });
@@ -202,10 +197,9 @@ class Router {
       if (!this.nativeEvent) {
         this.history.push({
           pathname: to,
-          state: {
-            ...meta,
-            route: { id: next.id },
-          },
+        }, {
+          ...meta,
+          route: { id: next.id },
         });
       } else {
         callback();
@@ -255,8 +249,6 @@ class Router {
     const callback = () => {
       // Unsubscribe from the history events.
       unlisten();
-
-      this.action = constants.REPLACE;
 
       // Emit completion event.
       if (emit) {

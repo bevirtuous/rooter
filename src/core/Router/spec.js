@@ -5,7 +5,6 @@ import * as constants from '../constants';
 import * as errors from './errors';
 
 const pathname1 = '/myroute/123';
-const pattern1 = '/myroute/:id';
 const dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => 123456);
 
 describe('Router', () => {
@@ -40,41 +39,10 @@ describe('Router', () => {
     });
   });
 
-  describe('handleNativeEvent()', () => {
-    it('should natively navigate backwards', async (done) => {
-      await router.push({ to: '/somewhere' });
-      await router.push({ to: '/somewhere/else' });
-      const spyPop = jest.spyOn(router, 'handlePop');
-
-      router.history.goBack();
-
-      setTimeout(() => {
-        expect(spyPop).toHaveBeenCalledTimes(1);
-        done();
-      }, 500);
-    });
-
-    it('should natively navigate forwards', async (done) => {
-      const url = '/somewhere?hi=123#what';
-
-      await router.push({ to: url });
-      await router.pop();
-      const spyPush = jest.spyOn(router, 'handlePush');
-
-      router.history.goForward();
-
-      setTimeout(() => {
-        expect(spyPush).toHaveBeenCalledTimes(1);
-        expect(router.getCurrentRoute().location).toEqual(url);
-        done();
-      }, 500);
-    });
-  });
-
   describe('push()', () => {
     it('should resolve correctly', () => {
       const params = {
-        to: `${pathname1}?s=phrase`,
+        to: `${pathname1}?s=phrase#what`,
         meta: {
           test: 123,
         },
@@ -99,7 +67,15 @@ describe('Router', () => {
           prev: result.prev,
         });
 
-        expect(router.history.location.pathname).toBe(`${pathname1}?s=phrase`);
+        expect(router.history.location.pathname).toBe(pathname1);
+        expect(router.history.location.search).toBe('?s=phrase');
+        expect(router.history.location.state).toEqual(expect.objectContaining({
+          route: {
+            id: expect.any(String),
+          },
+          test: 123,
+        }));
+        expect(router.history.location.hash).toBe('#what');
       });
     });
 
@@ -227,17 +203,20 @@ describe('Router', () => {
     it('should merge given state to incoming route', async (done) => {
       await router.push({
         to: '/myroute/456',
-        state: { test: 123 },
+        meta: { hi: 5, ho: 123 },
       });
       await router.push({ to: '/myroute/789' });
 
       const meta = {
-        test: 456,
+        ho: 456,
       };
 
       router.pop({ meta }).then(() => {
         const currentRoute = stack.getByIndex(router.currentIndex);
-        expect(currentRoute.meta).toEqual(meta);
+        expect(currentRoute.meta).toEqual({
+          hi: 5,
+          ho: 456,
+        });
         done();
       });
     });
@@ -410,6 +389,37 @@ describe('Router', () => {
       router.update(12345, { test: 123 }).catch((error) => (
         expect(error).toEqual(new Error(errors.EINVALIDID))
       ));
+    });
+  });
+
+  describe('handleNativeEvent()', () => {
+    it('should natively navigate backwards', async (done) => {
+      await router.push({ to: '/somewhere' });
+      await router.push({ to: '/somewhere/else' });
+      const spyPop = jest.spyOn(router, 'handlePop');
+
+      router.history.back();
+
+      setTimeout(() => {
+        expect(spyPop).toHaveBeenCalledTimes(1);
+        done();
+      }, 500);
+    });
+
+    it('should natively navigate forwards', async (done) => {
+      const url = '/somewhere?hi=123#what';
+
+      await router.push({ to: url });
+      await router.pop();
+      const spyPush = jest.spyOn(router, 'handlePush');
+
+      router.history.forward();
+
+      setTimeout(() => {
+        expect(spyPush).toHaveBeenCalledTimes(1);
+        expect(router.getCurrentRoute().location).toEqual(url);
+        done();
+      }, 500);
     });
   });
 });
