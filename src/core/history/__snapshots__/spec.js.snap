@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`history should be a \`createBrowserHistory\` instance 1`] = `
+Object {
+  "action": "POP",
+  "back": [Function],
+  "block": [Function],
+  "createHref": [Function],
+  "forward": [Function],
+  "go": [Function],
+  "listen": [Function],
+  "location": Object {
+    "hash": "",
+    "key": "default",
+    "pathname": "/myroute/123",
+    "search": "",
+    "state": null,
+  },
+  "push": [Function],
+  "replace": [Function],
+}
+`;

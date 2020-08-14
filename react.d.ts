@@ -1,4 +1,3 @@
-import * as History from 'history';
 import * as React from 'react';
 import { Route as RouteType, ObjectType } from './index';
 
@@ -17,7 +16,6 @@ export function Route(props: RouteProps): JSX.Element;
 
 export interface RouterProps {
   children: React.ReactNode,
-  history?: History.History,
 }
 
 export function Router(props: RouterProps): JSX.Element;

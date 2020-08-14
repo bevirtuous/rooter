@@ -1,6 +1,7 @@
 import router from './index';
 import stack from '../Stack';
 import emitter from '../emitter';
+import history from '../history';
 import * as constants from '../constants';
 import * as errors from './errors';
 
@@ -19,23 +20,6 @@ describe('Router', () => {
 
       expect(stack.getAll().size).toBe(1);
       expect(entry.pathname).toBe(pathname1);
-    });
-
-    it('should make use of a given custom history', () => {
-      // Get the initial first id.
-      const [id] = stack.first();
-
-      const { history } = router;
-
-      router.constructor();
-      const { history: newHistory } = router;
-
-      // Get the new first id.
-      const [newId] = stack.first();
-
-      expect(history).not.toEqual(newHistory);
-      expect(stack.getAll().size).toBe(1);
-      expect(id).not.toBe(newId);
     });
   });
 
@@ -67,15 +51,15 @@ describe('Router', () => {
           prev: result.prev,
         });
 
-        expect(router.history.location.pathname).toBe(pathname1);
-        expect(router.history.location.search).toBe('?s=phrase');
-        expect(router.history.location.state).toEqual(expect.objectContaining({
+        expect(history.location.pathname).toBe(pathname1);
+        expect(history.location.search).toBe('?s=phrase');
+        expect(history.location.state).toEqual(expect.objectContaining({
           route: {
             id: expect.any(String),
           },
           test: 123,
         }));
-        expect(router.history.location.hash).toBe('#what');
+        expect(history.location.hash).toBe('#what');
       });
     });
 
@@ -153,7 +137,7 @@ describe('Router', () => {
           next: result.next,
           prev: result.prev,
         });
-        expect(router.history.location.pathname).toBe(pathname1);
+        expect(history.location.pathname).toBe(pathname1);
 
         done();
       });
@@ -306,7 +290,7 @@ describe('Router', () => {
       const meta = { reset: true };
 
       router.reset({ meta }).then((result) => {
-        expect(router.history.location.pathname).toBe(pathname1);
+        expect(history.location.pathname).toBe(pathname1);
         expect(firstRoute).toBe(result.next);
         expect(result.next.meta).toEqual(meta);
         expect(prevRoute).toBe(result.prev);
@@ -398,7 +382,7 @@ describe('Router', () => {
       await router.push({ to: '/somewhere/else' });
       const spyPop = jest.spyOn(router, 'handlePop');
 
-      router.history.back();
+      history.back();
 
       setTimeout(() => {
         expect(spyPop).toHaveBeenCalledTimes(1);
@@ -413,7 +397,7 @@ describe('Router', () => {
       await router.pop();
       const spyPush = jest.spyOn(router, 'handlePush');
 
-      router.history.forward();
+      history.forward();
 
       setTimeout(() => {
         expect(spyPush).toHaveBeenCalledTimes(1);

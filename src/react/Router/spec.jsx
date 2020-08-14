@@ -7,8 +7,6 @@ import { EVENT } from '../../core/constants';
 import Router from './index';
 import useHistory from '../useHistory';
 
-const spy = jest.spyOn(router, 'constructor');
-
 describe('<Router />', () => {
   it('should render with children and context', () => {
     const app = mount((
@@ -78,21 +76,5 @@ describe('<Router />', () => {
     app.update();
 
     expect(app.html()).toBe('789');
-  });
-
-  // This test must go at the end as it messes with the router instance.
-  it('should pass the history function to core', () => {
-    const mockHistory = () => ({
-      listen: () => {},
-      location: {},
-    });
-
-    mount((
-      <Router history={mockHistory}>
-        <p />
-      </Router>
-    ));
-
-    expect(spy).toHaveBeenCalledWith(mockHistory);
   });
 });

@@ -4,7 +4,7 @@ import { RouterContext } from '../context';
 import { EVENT, UPDATE } from '../../core/constants';
 import emitter from '../../core/emitter';
 
-function Router({ children, history }) {
+function Router({ children }) {
   const [routes, setRoutes] = useState({
     prev: null,
     next: router.getCurrentRoute(),
@@ -37,12 +37,6 @@ function Router({ children, history }) {
 
     return () => emitter.off(EVENT, handler);
   }, []);
-
-  useEffect(() => {
-    if (history) {
-      router.constructor(history);
-    }
-  }, [history]);
 
   return (
     <RouterContext.Provider value={routes}>

@@ -6,11 +6,9 @@ import stack from '../Stack';
 import * as constants from '../constants';
 
 class Router {
-  constructor(createHistory = history) {
+  constructor() {
     // Flag to indicate a native history event. Should always be reset to true.
     this.nativeEvent = true;
-
-    this.history = createHistory();
 
     // The `currentIndex` is used to track which stack entry is the current route.
     this.currentIndex = 0;
@@ -23,7 +21,7 @@ class Router {
 
     this.addInitialRoute();
 
-    this.historyListener = this.history.listen(this.handleNativeEvent);
+    this.historyListener = history.listen(this.handleNativeEvent);
   }
 
   handleNativeEvent = ({ location, action }) => {
@@ -52,7 +50,7 @@ class Router {
    * Note: we cannot match it against a pattern at this point.
    */
   addInitialRoute = () => {
-    const { hash, pathname, search } = this.history.location;
+    const { hash, pathname, search } = history.location;
     const fullPathname = `${pathname}${search}${hash}`;
     const route = new Route({ pathname: fullPathname });
 
@@ -108,11 +106,11 @@ class Router {
      * Create a reference to the history listener
      * to be able to unsubscribe from inside the callback.
      */
-    unlisten = this.history.listen(callback);
+    unlisten = history.listen(callback);
 
     // Perform the history back action.
     if (forceNative || !this.nativeEvent) {
-      this.history.go(steps * -1);
+      history.go(steps * -1);
     } else {
       callback();
     }
@@ -191,11 +189,11 @@ class Router {
        * Create a reference to the history listener
        * to be able to unsubscribe from inside the callback.
        */
-      unlisten = this.history.listen(callback);
+      unlisten = history.listen(callback);
 
       // Perform the history push action.
       if (!this.nativeEvent) {
-        this.history.push({
+        history.push({
           pathname: to,
         }, {
           ...meta,
@@ -263,11 +261,11 @@ class Router {
      * Create a reference to the history listener
      * to be able to unsubscribe from inside the callback.
      */
-    unlisten = this.history.listen(callback);
+    unlisten = history.listen(callback);
 
     // Perform the history replace action.
     if (!this.nativeEvent) {
-      this.history.replace({
+      history.replace({
         pathname: to,
         state: {
           ...meta,
