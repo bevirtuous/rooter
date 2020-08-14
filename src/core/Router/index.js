@@ -269,10 +269,9 @@ class Router {
     if (!this.nativeEvent) {
       this.history.replace({
         pathname: to,
-        state: {
-          ...meta,
-          route: { id },
-        },
+      }, {
+        ...meta,
+        route: { id },
       });
     } else {
       callback();

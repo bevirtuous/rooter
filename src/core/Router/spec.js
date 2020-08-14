@@ -241,18 +241,26 @@ describe('Router', () => {
 
       const result = await router.replace({
         to: '/myroute/789',
-        meta: { test: 123 },
+        meta: { test: '123' },
       });
 
       expect(stack.getAll().size).toBe(1);
       expect(result.prev.pathname).toBe('/myroute/456');
       expect(result.next.pathname).toBe('/myroute/789');
-      expect(result.next.meta).toEqual({ test: 123 });
+      expect(result.next.meta).toEqual({ test: '123' });
       expect(didCallback).toHaveBeenCalledWith({
         action: constants.REPLACE,
         next: result.next,
         prev: result.prev,
       });
+
+      expect(router.history.location.pathname).toBe('/myroute/789');
+      expect(router.history.location.state).toEqual(expect.objectContaining({
+        route: {
+          id: expect.any(String),
+        },
+        test: '123',
+      }));
     });
 
     it('should reject when params are missing', () => (
