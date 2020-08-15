@@ -1,6 +1,6 @@
 {
   "name": "rooter",
-  "version": "1.0.0-beta.29",
+  "version": "1.0.0-beta.30",
   "description": "",
   "scripts": {
     "start": "NODE_ENV=development rollup -c -w",
