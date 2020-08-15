@@ -7,7 +7,7 @@ const useHistory = () => {
 
   return {
     current: next,
-    currentIndex: router.currentIndex,
+    currentIndex: router.getCurrentIndex(),
     previous: prev,
   };
 };

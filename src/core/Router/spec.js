@@ -10,8 +10,7 @@ const dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => 123456);
 
 describe('Router', () => {
   beforeEach(() => {
-    stack.clear();
-    router.constructor();
+    router.init();
   });
 
   describe('constructor()', () => {
@@ -37,7 +36,7 @@ describe('Router', () => {
       emitter.once(constants.EVENT, didCallback);
 
       return router.push(params).then((result) => {
-        expect(router.currentIndex).toBe(1);
+        expect(router.getCurrentIndex()).toBe(1);
 
         const [, route] = stack.last();
 
@@ -72,7 +71,7 @@ describe('Router', () => {
       await router.pop({ steps: 2 });
       await router.push({ to: '/myroute/abc' });
 
-      expect(router.currentIndex).toBe(1);
+      expect(router.getCurrentIndex()).toBe(1);
       expect(stack.getAll().size).toBe(2);
       expect(stack.getByIndex(1).pathname).toBe('/myroute/abc');
     });
@@ -130,7 +129,7 @@ describe('Router', () => {
         const route = stack.getByIndex(0);
 
         expect(stack.getAll().size).toBe(2);
-        expect(router.currentIndex).toBe(0);
+        expect(router.getCurrentIndex()).toBe(0);
         expect(route).toEqual(result.next);
         expect(didCallback).toHaveBeenCalledWith({
           action: constants.POP,
@@ -161,7 +160,7 @@ describe('Router', () => {
       await router.push({ to: '/myroute/789' });
 
       router.pop({ steps: 2 }).then((result) => {
-        const currentRoute = stack.getByIndex(router.currentIndex);
+        const currentRoute = stack.getByIndex(router.getCurrentIndex());
         expect(currentRoute).toBe(result.next);
         done();
       });
@@ -196,7 +195,7 @@ describe('Router', () => {
       };
 
       router.pop({ meta }).then(() => {
-        const currentRoute = stack.getByIndex(router.currentIndex);
+        const currentRoute = stack.getByIndex(router.getCurrentIndex());
         expect(currentRoute.meta).toEqual({
           hi: 5,
           ho: 456,
@@ -238,8 +237,8 @@ describe('Router', () => {
         prev: result.prev,
       });
 
-      expect(router.history.location.pathname).toBe('/myroute/789');
-      expect(router.history.location.state).toEqual(expect.objectContaining({
+      expect(history.location.pathname).toBe('/myroute/789');
+      expect(history.location.state).toEqual(expect.objectContaining({
         route: {
           id: expect.any(String),
         },
@@ -294,7 +293,7 @@ describe('Router', () => {
 
       emitter.once(constants.EVENT, didCallback);
 
-      const prevRoute = stack.getByIndex(router.currentIndex);
+      const prevRoute = stack.getByIndex(router.getCurrentIndex());
       const meta = { reset: true };
 
       router.reset({ meta }).then((result) => {
@@ -388,12 +387,11 @@ describe('Router', () => {
     it('should natively navigate backwards', async (done) => {
       await router.push({ to: '/somewhere' });
       await router.push({ to: '/somewhere/else' });
-      const spyPop = jest.spyOn(router, 'handlePop');
 
       history.back();
 
       setTimeout(() => {
-        expect(spyPop).toHaveBeenCalledTimes(1);
+        expect(router.getCurrentRoute().pathname).toEqual('/somewhere');
         done();
       }, 500);
     });
@@ -403,12 +401,10 @@ describe('Router', () => {
 
       await router.push({ to: url });
       await router.pop();
-      const spyPush = jest.spyOn(router, 'handlePush');
 
       history.forward();
 
       setTimeout(() => {
-        expect(spyPush).toHaveBeenCalledTimes(1);
         expect(router.getCurrentRoute().location).toEqual(url);
         done();
       }, 500);

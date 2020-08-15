@@ -5,51 +5,16 @@ import history from '../history';
 import stack from '../Stack';
 import * as constants from '../constants';
 
-class Router {
-  constructor() {
-    // Flag to indicate a native history event. Should always be reset to true.
-    this.nativeEvent = true;
+function Router() {
+  let currentIndex = 0;
+  let historyListener;
+  let nativeEvent = true;
 
-    // The `currentIndex` is used to track which stack entry is the current route.
-    this.currentIndex = 0;
-
-    // Unsubscribe to any other history module changes.
-    if (typeof this.historyListener === 'function') {
-      this.historyListener();
-      stack.clear();
-    }
-
-    this.addInitialRoute();
-
-    this.historyListener = history.listen(this.handleNativeEvent);
+  function getCurrentIndex() {
+    return currentIndex;
   }
 
-  handleNativeEvent = ({ location, action }) => {
-    if (!this.nativeEvent) {
-      return;
-    }
-
-    const next = stack.getByIndex(this.currentIndex + 1);
-
-    if (next && location.state && location.state.route && next.id === location.state.route.id) {
-      this.handlePush({
-        to: next.location,
-        meta: location.state,
-      }, false, true);
-
-      return;
-    }
-
-    if (action === constants.POP) {
-      this.handlePop();
-    }
-  }
-
-  /**
-   * Populate the stack with an initial entry to match the history module.
-   * Note: we cannot match it against a pattern at this point.
-   */
-  addInitialRoute = () => {
+  function addInitialRoute() {
     const { hash, pathname, search } = history.location;
     const fullPathname = `${pathname}${search}${hash}`;
     const route = new Route({ pathname: fullPathname });
@@ -61,60 +26,62 @@ class Router {
    * @param {Object} params The router action params.
    * @returns {Promise}
    */
-  handlePop = (params = {}) => new Promise((resolve, reject) => {
-    const {
-      emit = true,
-      forceNative = false,
-      steps = 1,
-      meta = null,
-    } = params;
-    let unlisten = null;
+  function handlePop(params = {}) {
+    return new Promise((resolve, reject) => {
+      const {
+        emit = true,
+        forceNative = false,
+        steps = 1,
+        meta = null,
+      } = params;
+      let unlisten = null;
 
-    if (steps <= 0) {
-      reject(new Error(errors.EINVALIDSTEPS));
-      this.nativeEvent = true;
-      return;
-    }
-
-    // Get id of target route.
-    const targetIndex = Math.max(this.currentIndex - steps, 0);
-    const prev = stack.getByIndex(this.currentIndex);
-    const next = stack.getByIndex(targetIndex);
-
-    if (meta) {
-      next.meta = Object.assign(next.meta, meta);
-    }
-
-    const end = { action: constants.POP, prev, next };
-
-    /**
-     *
-     */
-    const callback = () => {
-      unlisten();
-      this.currentIndex = targetIndex;
-
-      if (emit) {
-        emitter.emit(constants.EVENT, end);
+      if (steps <= 0) {
+        reject(new Error(errors.EINVALIDSTEPS));
+        nativeEvent = true;
+        return;
       }
 
-      resolve(end);
-      this.nativeEvent = true;
-    };
+      // Get id of target route.
+      const targetIndex = Math.max(currentIndex - steps, 0);
+      const prev = stack.getByIndex(currentIndex);
+      const next = stack.getByIndex(targetIndex);
 
-    /**
-     * Create a reference to the history listener
-     * to be able to unsubscribe from inside the callback.
-     */
-    unlisten = history.listen(callback);
+      if (meta) {
+        next.meta = Object.assign(next.meta, meta);
+      }
 
-    // Perform the history back action.
-    if (forceNative || !this.nativeEvent) {
-      history.go(steps * -1);
-    } else {
-      callback();
-    }
-  });
+      const end = { action: constants.POP, prev, next };
+
+      /**
+       *
+       */
+      const callback = () => {
+        unlisten();
+        currentIndex = targetIndex;
+
+        if (emit) {
+          emitter.emit(constants.EVENT, end);
+        }
+
+        resolve(end);
+        nativeEvent = true;
+      };
+
+      /**
+       * Create a reference to the history listener
+       * to be able to unsubscribe from inside the callback.
+       */
+      unlisten = history.listen(callback);
+
+      // Perform the history back action.
+      if (forceNative || !nativeEvent) {
+        history.go(steps * -1);
+      } else {
+        callback();
+      }
+    });
+  }
 
   /**
    * @param {Object} params The params to use when navigating.
@@ -123,19 +90,19 @@ class Router {
    * the stack is skipped.
    * @returns {Promise}
    */
-  handlePush(params, cleanStack = true, nativePush = false) {
+  function handlePush(params, cleanStack = true, nativePush = false) {
     return new Promise((resolve, reject) => {
       // Check for missing parameters.
       if (!params) {
         reject(new Error(errors.EPARAMSMISSING));
-        this.nativeEvent = true;
+        nativeEvent = true;
         return;
       }
 
       // Check for empty params.
       if (Object.keys(params).length === 0) {
         reject(new Error(errors.EPARAMSEMPTY));
-        this.nativeEvent = true;
+        nativeEvent = true;
         return;
       }
 
@@ -148,14 +115,14 @@ class Router {
 
       // Remove all unwanted items from the stack.
       if (cleanStack) {
-        while (this.currentIndex < stack.getAll().size - 1) {
+        while (currentIndex < stack.getAll().size - 1) {
           const [id] = stack.last();
           stack.remove(id);
         }
       }
 
-      const prev = stack.getByIndex(this.currentIndex);
-      const next = nativePush ? stack.getByIndex(this.currentIndex + 1) : new Route({
+      const prev = stack.getByIndex(currentIndex);
+      const next = nativePush ? stack.getByIndex(currentIndex + 1) : new Route({
         pathname: to,
         meta,
       });
@@ -173,7 +140,7 @@ class Router {
         unlisten();
 
         // Increment the route index.
-        this.currentIndex += 1;
+        currentIndex += 1;
 
         // Emit completion event.
         if (emit) {
@@ -182,7 +149,7 @@ class Router {
 
         // Resolve the Promise.
         resolve({ prev, next });
-        this.nativeEvent = true;
+        nativeEvent = true;
       };
 
       /**
@@ -192,7 +159,7 @@ class Router {
       unlisten = history.listen(callback);
 
       // Perform the history push action.
-      if (!this.nativeEvent) {
+      if (!nativeEvent) {
         history.push({
           pathname: to,
         }, {
@@ -205,18 +172,18 @@ class Router {
     });
   }
 
-  handleReplace = (params) => new Promise((resolve, reject) => {
+  const handleReplace = (params) => new Promise((resolve, reject) => {
     // Check for missing parameters.
     if (!params) {
       reject(new Error(errors.EPARAMSMISSING));
-      this.nativeEvent = true;
+      nativeEvent = true;
       return;
     }
 
     // Check for empty params.
     if (Object.keys(params).length === 0) {
       reject(new Error(errors.EPARAMSEMPTY));
-      this.nativeEvent = true;
+      nativeEvent = true;
       return;
     }
 
@@ -227,7 +194,7 @@ class Router {
     } = params;
     let unlisten = null;
 
-    const { id } = stack.getByIndex(this.currentIndex);
+    const { id } = stack.getByIndex(currentIndex);
     const prev = stack.get(id);
     const next = new Route({
       pathname: to,
@@ -254,7 +221,7 @@ class Router {
       }
 
       resolve(end);
-      this.nativeEvent = true;
+      nativeEvent = true;
     };
 
     /**
@@ -264,7 +231,7 @@ class Router {
     unlisten = history.listen(callback);
 
     // Perform the history replace action.
-    if (!this.nativeEvent) {
+    if (!nativeEvent) {
       history.replace({
         pathname: to,
       }, {
@@ -274,82 +241,34 @@ class Router {
     } else {
       callback();
     }
-  })
-
-  /**
-   * @param {Object} params The params when routing.
-   * @returns {Promise}
-   */
-  push = (params) => {
-    this.nativeEvent = false;
-    return this.handlePush(params);
-  }
-
-  /**
-   * @param {Object} params The params when routing.
-   * @returns {Promise}
-   */
-  pop = (params) => {
-    this.nativeEvent = false;
-    return this.handlePop(params);
-  }
-
-  /**
-   * @param {Object} params The params when routing.
-   * @returns {Promise}
-   */
-  replace = (params) => {
-    this.nativeEvent = false;
-    return this.handleReplace(params);
-  }
-
-  /**
-   * @returns {Promise}
-   */
-  reset = ({ to = null, meta = null } = {}) => new Promise((resolve, reject) => {
-    if (this.currentIndex === 0) {
-      reject();
-      return;
-    }
-
-    this.nativeEvent = false;
-    const route = stack.first()[1];
-
-    const prev = stack.getByIndex(this.currentIndex);
-    const next = {
-      action: constants.RESET,
-      prev,
-      next: route,
-    };
-
-    if (meta) {
-      this.update(route.id, meta, false);
-    }
-
-    const params = {
-      emit: false,
-      forceNative: true,
-      steps: this.currentIndex,
-    };
-
-    this.handlePop(params)
-      .then(() => {
-        if (!to) {
-          emitter.emit(constants.EVENT, next);
-          this.nativeEvent = true;
-          resolve(next);
-          return;
-        }
-
-        this.handleReplace({ to, meta, emit: false }).then((replaced) => {
-          next.next = replaced.next;
-
-          this.nativeEvent = true;
-          emitter.emit(constants.EVENT, next);
-          resolve(next);
-        });
-      });
   });
+
+  /**
+   * @param {Object} params The params when routing.
+   * @returns {Promise}
+   */
+  const push = (params) => {
+    nativeEvent = false;
+    return handlePush(params);
+  };
+
+  /**
+   * @param {Object} params The params when routing.
+   * @returns {Promise}
+   */
+  const pop = (params) => {
+    nativeEvent = false;
+    return handlePop(params);
+  };
+
+  /**
+   * @param {Object} params The params when routing.
+   * @returns {Promise}
+   */
+  const replace = (params) => {
+    nativeEvent = false;
+    return handleReplace(params);
+  };
 
   /**
    * @param {string} id The route id to update.
@@ -357,7 +276,7 @@ class Router {
    * @param {boolean} emit When true, will emit when the meta was updated.
    * @returns {Promise}
    */
-  update = (id, meta = {}, emit = true) => new Promise((resolve, reject) => {
+  const update = (id, meta = {}, emit = true) => new Promise((resolve, reject) => {
     if (!id || Object.keys(meta).length === 0) {
       reject(new Error(errors.EPARAMSINVALID));
       return;
@@ -383,9 +302,105 @@ class Router {
   });
 
   /**
+   * @returns {Promise}
+   */
+  const reset = ({ to = null, meta = null } = {}) => new Promise((resolve, reject) => {
+    if (currentIndex === 0) {
+      reject();
+      return;
+    }
+
+    nativeEvent = false;
+    const route = stack.first()[1];
+
+    const prev = stack.getByIndex(currentIndex);
+    const next = {
+      action: constants.RESET,
+      prev,
+      next: route,
+    };
+
+    if (meta) {
+      update(route.id, meta, false);
+    }
+
+    const params = {
+      emit: false,
+      forceNative: true,
+      steps: currentIndex,
+    };
+
+    handlePop(params)
+      .then(() => {
+        if (!to) {
+          emitter.emit(constants.EVENT, next);
+          nativeEvent = true;
+          resolve(next);
+          return;
+        }
+
+        handleReplace({ to, meta, emit: false }).then((replaced) => {
+          next.next = replaced.next;
+
+          nativeEvent = true;
+          emitter.emit(constants.EVENT, next);
+          resolve(next);
+        });
+      });
+  });
+
+  /**
    * @returns {Route}
    */
-  getCurrentRoute = () => stack.getByIndex(this.currentIndex)
+  const getCurrentRoute = () => stack.getByIndex(currentIndex);
+
+  function handleNativeEvent({ location, action }) {
+    if (!nativeEvent) {
+      return;
+    }
+
+    const next = stack.getByIndex(currentIndex + 1);
+
+    if (next && location.state && location.state.route && next.id === location.state.route.id) {
+      handlePush({
+        to: next.location,
+        meta: location.state,
+      }, false, true);
+
+      return;
+    }
+
+    if (action === constants.POP) {
+      handlePop();
+    }
+  }
+
+  function init() {
+    currentIndex = 0;
+    nativeEvent = true;
+
+    if (typeof historyListener === 'function') {
+      historyListener();
+      stack.clear();
+    }
+
+    addInitialRoute();
+
+    historyListener = history.listen(handleNativeEvent);
+
+    return this;
+  }
+
+  return {
+    getCurrentIndex,
+    getCurrentRoute,
+    init,
+    pop,
+    push,
+    replace,
+    reset,
+    update,
+  };
 }
 
-export default new Router();
+export default new Router().init();
