@@ -3,7 +3,7 @@
 ![alt text](https://badgen.net/coveralls/c/github/bevirtuous/rooter "Code coverage")
 ![alt text](https://badgen.net/npm/license/rooter "MIT License")
 
-### Rooter is a modern client-side router that gives you the essential building blocks to create complex applications with confidence. With first-class support for [React](), [Svelte]() and [RxJS](), getting started is quick and easy.
+### Rooter is a modern client-side router that gives you the essential building blocks to create scalable applications with confidence. With first-class support for React and RxJS, getting started is quick and easy.
 
 ---
 
@@ -20,8 +20,11 @@ import { Router, Route } from 'rooter/react';
   <Route path="/">
     ...
   </Route>
-  <Route path="/product/:id">
-    ...
+  <Route path="/products">
+     ...
+    <Route path="/:productId">
+      ...
+    </Route>
   </Route>
   <Route path="/cart">
     ...
@@ -31,26 +34,6 @@ import { Router, Route } from 'rooter/react';
 
 There are also a number of hooks available to access router information inside of your components. More details and examples can be found in the [React section of the docs]().
 
----
-
-#### Svelte
-
-```xml
-import { Route } from 'rooter/svelte';
-
-<Route path="/" component={...} />
-<Route path="/product/:id" component={...} />
-<Route path="/cart" component={...} />
-```
-
-There is also a reactive store that keeps track of the current route for convenience.
-
-```js
-import { current } from 'rooter/svelte';
-
-// This is reactive :)
-$: query = $current.query;
-```
 ---
 
 #### RxJS
