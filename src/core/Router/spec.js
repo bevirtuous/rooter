@@ -50,15 +50,13 @@ describe('Router', () => {
           prev: result.prev,
         });
 
-        expect(history.location.pathname).toBe(pathname1);
-        expect(history.location.search).toBe('?s=phrase');
+        expect(history.location.pathname).toBe(`${pathname1}?s=phrase#what`);
         expect(history.location.state).toEqual(expect.objectContaining({
           route: {
             id: expect.any(String),
           },
           test: 123,
         }));
-        expect(history.location.hash).toBe('#what');
       });
     });
 
@@ -388,7 +386,7 @@ describe('Router', () => {
       await router.push({ to: '/somewhere' });
       await router.push({ to: '/somewhere/else' });
 
-      history.back();
+      history.goBack();
 
       setTimeout(() => {
         expect(router.getCurrentRoute().pathname).toEqual('/somewhere');
@@ -402,7 +400,7 @@ describe('Router', () => {
       await router.push({ to: url });
       await router.pop();
 
-      history.forward();
+      history.goForward();
 
       setTimeout(() => {
         expect(router.getCurrentRoute().location).toEqual(url);

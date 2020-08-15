@@ -354,7 +354,7 @@ function Router() {
    */
   const getCurrentRoute = () => stack.getByIndex(currentIndex);
 
-  function handleNativeEvent({ location, action }) {
+  function handleNativeEvent(location, action) {
     if (!nativeEvent) {
       return;
     }
