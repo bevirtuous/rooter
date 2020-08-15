@@ -51,15 +51,13 @@ describe('Router', () => {
           prev: result.prev,
         });
 
-        expect(history.location.pathname).toBe(pathname1);
-        expect(history.location.search).toBe('?s=phrase');
+        expect(history.location.pathname).toBe(`${pathname1}?s=phrase#what`);
         expect(history.location.state).toEqual(expect.objectContaining({
           route: {
             id: expect.any(String),
           },
           test: 123,
         }));
-        expect(history.location.hash).toBe('#what');
       });
     });
 
@@ -238,8 +236,8 @@ describe('Router', () => {
         prev: result.prev,
       });
 
-      expect(router.history.location.pathname).toBe('/myroute/789');
-      expect(router.history.location.state).toEqual(expect.objectContaining({
+      expect(history.location.pathname).toBe('/myroute/789');
+      expect(history.location.state).toEqual(expect.objectContaining({
         route: {
           id: expect.any(String),
         },
@@ -390,7 +388,7 @@ describe('Router', () => {
       await router.push({ to: '/somewhere/else' });
       const spyPop = jest.spyOn(router, 'handlePop');
 
-      history.back();
+      history.goBack();
 
       setTimeout(() => {
         expect(spyPop).toHaveBeenCalledTimes(1);
@@ -405,7 +403,7 @@ describe('Router', () => {
       await router.pop();
       const spyPush = jest.spyOn(router, 'handlePush');
 
-      history.forward();
+      history.goForward();
 
       setTimeout(() => {
         expect(spyPush).toHaveBeenCalledTimes(1);

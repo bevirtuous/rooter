@@ -24,7 +24,7 @@ class Router {
     this.historyListener = history.listen(this.handleNativeEvent);
   }
 
-  handleNativeEvent = ({ location, action }) => {
+  handleNativeEvent = (location, action) => {
     if (!this.nativeEvent) {
       return;
     }

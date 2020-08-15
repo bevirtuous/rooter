@@ -3,18 +3,18 @@
 exports[`history should be a \`createBrowserHistory\` instance 1`] = `
 Object {
   "action": "POP",
-  "back": [Function],
   "block": [Function],
   "createHref": [Function],
-  "forward": [Function],
   "go": [Function],
+  "goBack": [Function],
+  "goForward": [Function],
+  "length": 1,
   "listen": [Function],
   "location": Object {
     "hash": "",
-    "key": "default",
     "pathname": "/myroute/123",
     "search": "",
-    "state": null,
+    "state": undefined,
   },
   "push": [Function],
   "replace": [Function],
