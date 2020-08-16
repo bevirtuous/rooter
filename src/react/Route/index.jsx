@@ -4,12 +4,12 @@ import matcher from '../../core/matcher';
 import useHistory from '../useHistory';
 import useRoute from '../useRoute';
 
-function Route({ children, component: Component, path }) {
+function Route({ children, component: Component, path, exact = false }) {
   const { current } = useHistory();
   const parent = useRoute();
   const pattern = (parent ? parent.pattern : '') + path;
   const matchOptions = {
-    end: path === '/',
+    end: exact || path === '/',
   };
   const [matchFn] = useState(() => matcher(pattern, matchOptions));
   const match = matchFn(current.pathname);

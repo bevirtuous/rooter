@@ -29,6 +29,27 @@ exports[`<Route /> should support children 1`] = `
 </Router>
 `;
 
+exports[`<Route /> should support exact prop 1`] = `
+<Router
+  history={null}
+>
+  <Route
+    path="/"
+  />
+  <Route
+    exact={true}
+    path="/myroute/:id"
+  />
+  <Route
+    path="/myroute/:id/okay"
+  >
+    <div>
+      Hello Again.
+    </div>
+  </Route>
+</Router>
+`;
+
 exports[`<Route /> should support nested Routes 1`] = `
 <Router
   history={null}

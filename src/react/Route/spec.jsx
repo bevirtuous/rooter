@@ -65,6 +65,24 @@ describe('<Route />', () => {
     expect(app).toMatchSnapshot();
   });
 
+  it('should support exact prop', () => {
+    const app = mount((
+      <Router>
+        <Route path="/">
+          <div>Hello App.</div>
+        </Route>
+        <Route exact path={path}>
+          <div>Hello World.</div>
+        </Route>
+        <Route path="/myroute/:id/okay">
+          <div>Hello Again.</div>
+        </Route>
+      </Router>
+    ));
+
+    expect(app).toMatchSnapshot();
+  });
+
   it('should correctly set the RouteContext value', () => {
     let contextValue = null;
     const current = router.getCurrentRoute();
