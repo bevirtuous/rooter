@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import router from '../../core/Router';
 import { RouterContext } from '../context';
-import { EVENT, UPDATE } from '../../core/constants';
-import emitter from '../../core/emitter';
+import { UPDATE } from '../../core/constants';
 
 function Router({ children }) {
   const [routes, setRoutes] = useState({
@@ -33,9 +32,9 @@ function Router({ children }) {
       }
     }
 
-    emitter.on(EVENT, handler);
+    const listener = router.listen(handler);
 
-    return () => emitter.off(EVENT, handler);
+    return () => listener();
   }, []);
 
   return (

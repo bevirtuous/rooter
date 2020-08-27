@@ -1,6 +1,6 @@
 {
   "name": "rooter",
-  "version": "1.0.0-beta.30",
+  "version": "1.0.0-beta.31",
   "description": "",
   "scripts": {
     "start": "NODE_ENV=development rollup -c -w",
@@ -45,7 +45,6 @@
     "@virtuous/eslint-config": "^2.1.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^25.1.0",
-    "builtin-modules": "^3.1.0",
     "coveralls": "^3.0.9",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",

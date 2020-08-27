@@ -1,6 +1,5 @@
 import Route from '../Route';
 import * as errors from './errors';
-import emitter from '../emitter';
 import history from '../history';
 import stack from '../Stack';
 import * as constants from '../constants';
@@ -9,6 +8,17 @@ function Router() {
   let currentIndex = 0;
   let historyListener;
   let nativeEvent = true;
+  const listeners = [];
+
+  function addListener(func) {
+    const length = listeners.push(func);
+
+    return () => listeners.splice(length - 1, 1);
+  }
+
+  function updateListeners(params) {
+    listeners.forEach((func) => func(params));
+  }
 
   function getCurrentIndex() {
     return currentIndex;
@@ -61,7 +71,7 @@ function Router() {
         currentIndex = targetIndex;
 
         if (emit) {
-          emitter.emit(constants.EVENT, end);
+          updateListeners(end);
         }
 
         resolve(end);
@@ -144,7 +154,7 @@ function Router() {
 
         // Emit completion event.
         if (emit) {
-          emitter.emit(constants.EVENT, { action: constants.PUSH, prev, next });
+          updateListeners({ action: constants.PUSH, prev, next });
         }
 
         // Resolve the Promise.
@@ -217,7 +227,7 @@ function Router() {
 
       // Emit completion event.
       if (emit) {
-        emitter.emit(constants.EVENT, end);
+        updateListeners(end);
       }
 
       resolve(end);
@@ -295,7 +305,7 @@ function Router() {
     stack.update(id, route);
 
     if (emit) {
-      emitter.emit(constants.EVENT, { action: constants.UPDATE, route });
+      updateListeners({ action: constants.UPDATE, route });
     }
 
     resolve(route);
@@ -333,7 +343,7 @@ function Router() {
     handlePop(params)
       .then(() => {
         if (!to) {
-          emitter.emit(constants.EVENT, next);
+          updateListeners(next);
           nativeEvent = true;
           resolve(next);
           return;
@@ -343,7 +353,7 @@ function Router() {
           next.next = replaced.next;
 
           nativeEvent = true;
-          emitter.emit(constants.EVENT, next);
+          updateListeners(next);
           resolve(next);
         });
       });
@@ -395,6 +405,7 @@ function Router() {
     getCurrentIndex,
     getCurrentRoute,
     init,
+    listen: addListener,
     pop,
     push,
     replace,

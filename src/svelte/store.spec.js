@@ -1,18 +1,20 @@
 import { get } from 'svelte/store';
 import rooterStore from './store';
-import { EVENT, UPDATE } from '../core/constants';
-import emitter from '../core/emitter';
+import { history } from '../core';
 
 describe('svelte - store', () => {
   it('should update after rooter event', () => {
-    emitter.emit(EVENT, { next: 12345 });
+    history.push({ to: '/hello ' });
 
-    expect(get(rooterStore)).toEqual(12345);
-  });
-
-  it('should update after rooter UPDATE event', () => {
-    emitter.emit(EVENT, { action: UPDATE, route: 98765 });
-
-    expect(get(rooterStore)).toEqual(98765);
+    expect(get(rooterStore)).toEqual(expect.objectContaining({
+      created: expect.any(Number),
+      hash: null,
+      id: expect.any(String),
+      location: '/hello',
+      meta: {},
+      pathname: '/hello',
+      query: {},
+      updated: null,
+    }));
   });
 });

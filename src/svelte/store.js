@@ -1,9 +1,9 @@
 import { writable } from 'svelte/store';
-import { emitter, EVENT, UPDATE } from '../core';
+import { history, UPDATE } from '../core';
 
 const store = writable({});
 
-emitter.on(EVENT, (payload) => {
+history.listen((payload) => {
   if (payload.action === UPDATE) {
     store.set(payload.route);
   } else {

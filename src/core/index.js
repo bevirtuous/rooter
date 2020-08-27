@@ -4,6 +4,7 @@ import setQuery from './setQuery';
 export const history = {
   back: router.pop,
   current: router.getCurrentRoute,
+  listen: router.listen,
   push: router.push,
   go: router.push,
   pop: router.pop,
@@ -14,11 +15,9 @@ export const history = {
 };
 
 export {
-  EVENT,
   PUSH,
   POP,
   REPLACE,
   RESET,
   UPDATE,
 } from './constants';
-export { default as emitter } from './emitter';

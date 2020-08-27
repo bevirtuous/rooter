@@ -2,14 +2,13 @@ const babel = require('rollup-plugin-babel');
 const resolve = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const replace = require('@rollup/plugin-replace');
-const builtins = require('builtin-modules');
 const copy = require('rollup-plugin-copy');
 
 const env = process.env.NODE_ENV;
 
 module.exports = [
   {
-    external: ['react', 'react-dom', 'rxjs', 'rxjs/operators', 'svelte'].concat(builtins),
+    external: ['react', 'react-dom', 'rxjs', 'rxjs/operators', 'svelte'],
     input: {
       index: 'src/core/index.js',
       react: 'src/react/index.js',

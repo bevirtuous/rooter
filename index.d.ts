@@ -1,5 +1,3 @@
-import * as Events from 'events';
-
 export type Url = string;
 
 export type ObjectType = {
@@ -29,6 +27,7 @@ export interface Route {
 interface RouterHistory {
   back(params: Params): Promise<{ action: 'POP', prev: Route, next: Route }>,
   current(): Route,
+  listen(): Function<{ action: string, prev: Route, next:Route }>,
   go(params: Params): Promise<{ prev: Route, next: Route }>,
   pop(params: Params): Promise<{ action: 'POP', prev: Route, next: Route }>,
   push(params: Params): Promise<{ prev: Route, next: Route }>,
@@ -40,11 +39,8 @@ interface RouterHistory {
 
 export const history: RouterHistory;
 
-export const EVENT: 'rooter';
 export const PUSH: 'PUSH';
 export const POP: 'POP';
 export const REPLACE: 'REPLACE';
 export const RESET: 'RESET';
 export const UPDATE: 'UPDATE';
-
-export const emitter: Events.EventEmitter;
