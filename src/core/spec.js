@@ -7,11 +7,11 @@ describe('Core API', () => {
     expect(history.go).toBe(router.push);
     expect(history.push).toBe(router.push);
     expect(history.back).toBe(router.pop);
+    expect(history.listen).toBe(router.listen);
     expect(history.pop).toBe(router.pop);
     expect(history.replace).toBe(router.replace);
     expect(history.reset).toBe(router.reset);
     expect(history.current).toBe(router.getCurrentRoute);
-    expect(history.setMeta).toBe(router.update);
     expect(history.setQuery).toBe(setQuery);
   });
 });

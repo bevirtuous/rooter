@@ -18,7 +18,6 @@ describe('Route', () => {
     expect(route.hash).toBe('headline');
     expect(route.meta).toEqual({ a: 1, b: 2 });
     expect(route.created).toEqual(123456789);
-    expect(route.updated).toBeNull();
   });
 
   it('should trim whitespace from location', () => {

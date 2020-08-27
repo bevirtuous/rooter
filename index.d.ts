@@ -21,7 +21,6 @@ export interface Route {
   pathname: string;
   query: Query;
   created: number;
-  updated: number;
 }
 
 interface RouterHistory {
@@ -33,7 +32,6 @@ interface RouterHistory {
   push(params: Params): Promise<{ prev: Route, next: Route }>,
   replace(params: Params): Promise<{ action: 'REPLACE', prev: Route, next: Route }>,
   reset(params: Params): Promise<Route>,
-  setMeta(id: string, meta?: ObjectType, emit?: boolean): Promise<Route>,
   setQuery(input: Query): Promise<{ prev: Route, next: Route }>
 }
 
@@ -43,4 +41,3 @@ export const PUSH: 'PUSH';
 export const POP: 'POP';
 export const REPLACE: 'REPLACE';
 export const RESET: 'RESET';
-export const UPDATE: 'UPDATE';

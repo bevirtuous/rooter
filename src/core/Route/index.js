@@ -11,7 +11,6 @@ function Route(options) {
   const { query, url: pathname } = queryString.parseUrl(path);
 
   const created = Date.now();
-  const updated = null;
 
   return {
     id,
@@ -21,7 +20,6 @@ function Route(options) {
     pathname,
     query,
     created,
-    updated,
   };
 }
 

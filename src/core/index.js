@@ -10,7 +10,6 @@ export const history = {
   pop: router.pop,
   replace: router.replace,
   reset: router.reset,
-  setMeta: router.update,
   setQuery,
 };
 
@@ -19,5 +18,4 @@ export {
   POP,
   REPLACE,
   RESET,
-  UPDATE,
 } from './constants';

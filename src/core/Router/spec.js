@@ -5,7 +5,6 @@ import * as constants from '../constants';
 import * as errors from './errors';
 
 const pathname1 = '/myroute/123';
-const dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => 123456);
 
 let listener = () => {};
 
@@ -334,55 +333,6 @@ describe('Router', () => {
         expect(callback).toHaveBeenCalledWith(result);
         done();
       });
-    });
-  });
-
-  describe('update()', () => {
-    it('should correctly update/override a route`s state', async () => {
-      const [id, route] = stack.last();
-      const callback = jest.fn();
-      const meta = {
-        test: 123,
-      };
-
-      listener = router.listen(callback);
-
-      await router.update(id, meta);
-
-      expect(route.meta).toEqual(meta);
-      expect(route.updated).toEqual(dateNowSpy());
-
-      expect(callback).toHaveBeenCalledWith({
-        action: constants.UPDATE,
-        route,
-      });
-
-      await router.update(id, { test: 456 });
-      expect(route.meta).toEqual({ test: 456 });
-    });
-
-    it('should reject when id is missing', () => {
-      router.update().catch((error) => (
-        expect(error).toEqual(new Error(errors.EPARAMSINVALID))
-      ));
-    });
-
-    it('should reject when state is missing', () => {
-      router.update(12345).catch((error) => (
-        expect(error).toEqual(new Error(errors.EPARAMSINVALID))
-      ));
-    });
-
-    it('should reject when state is empty', () => {
-      router.update(12345, {}).catch((error) => (
-        expect(error).toEqual(new Error(errors.EPARAMSINVALID))
-      ));
-    });
-
-    it('should reject when id doesn`t match a route', () => {
-      router.update(12345, { test: 123 }).catch((error) => (
-        expect(error).toEqual(new Error(errors.EINVALIDID))
-      ));
     });
   });
 

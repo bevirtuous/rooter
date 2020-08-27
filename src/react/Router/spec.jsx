@@ -35,30 +35,4 @@ describe('<Router />', () => {
 
     expect(app.html()).toBe('/myroute/456');
   });
-
-  it('should update on route update', async () => {
-    const MyComponent = () => useHistory().current.meta.test;
-
-    await act(async () => {
-      await router.push({ to: '/myroute/456', meta: { test: 123 } });
-    });
-
-    const app = mount((
-      <Router>
-        <MyComponent />
-      </Router>
-    ));
-
-    const { id } = router.getCurrentRoute();
-
-    expect(app.html()).toBe('123');
-
-    await act(async () => {
-      await router.update(id, { test: 789 });
-    });
-
-    app.update();
-
-    expect(app.html()).toBe('789');
-  });
 });

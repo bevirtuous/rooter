@@ -281,37 +281,6 @@ function Router() {
   };
 
   /**
-   * @param {string} id The route id to update.
-   * @param {Object} meta The new meta.
-   * @param {boolean} emit When true, will emit when the meta was updated.
-   * @returns {Promise}
-   */
-  const update = (id, meta = {}, emit = true) => new Promise((resolve, reject) => {
-    if (!id || Object.keys(meta).length === 0) {
-      reject(new Error(errors.EPARAMSINVALID));
-      return;
-    }
-
-    const route = stack.get(id);
-
-    if (!route) {
-      reject(new Error(errors.EINVALIDID));
-      return;
-    }
-
-    route.meta = Object.assign(route.meta, meta);
-    route.updated = Date.now();
-
-    stack.update(id, route);
-
-    if (emit) {
-      updateListeners({ action: constants.UPDATE, route });
-    }
-
-    resolve(route);
-  });
-
-  /**
    * @returns {Promise}
    */
   const reset = ({ to = null, meta = null } = {}) => new Promise((resolve, reject) => {
@@ -331,7 +300,8 @@ function Router() {
     };
 
     if (meta) {
-      update(route.id, meta, false);
+      route.meta = Object.assign(route.meta, meta);
+      stack.update(route.id, route);
     }
 
     const params = {
@@ -410,7 +380,6 @@ function Router() {
     push,
     replace,
     reset,
-    update,
   };
 }
 

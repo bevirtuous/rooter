@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import router from '../../core/Router';
 import { RouterContext } from '../context';
-import { UPDATE } from '../../core/constants';
 
 function Router({ children }) {
   const [routes, setRoutes] = useState({
@@ -16,23 +15,8 @@ function Router({ children }) {
     });
   }
 
-  function handleUpdate(next) {
-    setRoutes((old) => ({
-      prev: old.prev,
-      next,
-    }));
-  }
-
   useEffect(() => {
-    function handler(params) {
-      if (params.action === UPDATE) {
-        handleUpdate(params.route);
-      } else {
-        handleChange(params);
-      }
-    }
-
-    const listener = router.listen(handler);
+    const listener = router.listen(handleChange);
 
     return () => listener();
   }, []);

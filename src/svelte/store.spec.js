@@ -14,7 +14,6 @@ describe('svelte - store', () => {
       meta: {},
       pathname: '/hello',
       query: {},
-      updated: null,
     }));
   });
 });
