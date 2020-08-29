@@ -8,7 +8,7 @@ function decodeParam(param) {
   }
 }
 
-function pathMatch(path, customOptions = {}) {
+function pathMatch(path, customOptions) {
   const options = {
     sensitive: false,
     strict: false,
