@@ -8,15 +8,13 @@ function Router({ children }) {
     next: router.getCurrentRoute(),
   });
 
-  function handleChange({ prev, next }) {
-    setRoutes({
-      prev,
-      next,
-    });
-  }
-
   useEffect(() => {
-    const listener = router.listen(handleChange);
+    const listener = router.listen(({ next, prev }) => {
+      setRoutes({
+        prev,
+        next,
+      });
+    });
 
     return () => listener();
   }, []);
@@ -27,9 +25,5 @@ function Router({ children }) {
     </RouterContext.Provider>
   );
 }
-
-Router.defaultProps = {
-  history: null,
-};
 
 export default Router;

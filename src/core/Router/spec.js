@@ -61,6 +61,12 @@ describe('Router', () => {
       });
     });
 
+    it('should allow passing a string when pushing', () => (
+      router.push('/somewhere').then(({ next }) => (
+        expect(next.pathname).toEqual('/somewhere')
+      ))
+    ));
+
     it('should remove all forward routes from the stack', async () => {
       await router.push({ to: '/myroute/456' });
       await router.push({ to: '/myroute/789' });
@@ -246,6 +252,12 @@ describe('Router', () => {
       }));
     });
 
+    it('should allow passing a string when replacing', () => (
+      router.replace('/somewhere').then(({ next }) => (
+        expect(next.pathname).toEqual('/somewhere')
+      ))
+    ));
+
     it('should reject when params are missing', () => (
       router.replace().catch((error) => (
         expect(error).toEqual(new Error(errors.EPARAMSMISSING))
@@ -338,18 +350,21 @@ describe('Router', () => {
 
   describe('handleNativeEvent()', () => {
     it('should natively navigate backwards', async (done) => {
+      const spy = jest.spyOn(history, 'goBack');
       await router.push({ to: '/somewhere' });
       await router.push({ to: '/somewhere/else' });
 
       history.goBack();
 
       setTimeout(() => {
+        expect(spy).toHaveBeenCalledTimes(1);
         expect(router.getCurrentRoute().pathname).toEqual('/somewhere');
         done();
       }, 500);
     });
 
     it('should natively navigate forwards', async (done) => {
+      const spy = jest.spyOn(history, 'goForward');
       const url = '/somewhere?hi=123#what';
 
       await router.push({ to: url });
@@ -358,6 +373,7 @@ describe('Router', () => {
       history.goForward();
 
       setTimeout(() => {
+        expect(spy).toHaveBeenCalledTimes(1);
         expect(router.getCurrentRoute().location).toEqual(url);
         done();
       }, 500);

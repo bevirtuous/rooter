@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Route /> should render component 1`] = `
-<Router
-  history={null}
->
+<Router>
   <Route
     component={[Function]}
     path="/myroute/:id"
@@ -16,9 +14,7 @@ exports[`<Route /> should render component 1`] = `
 `;
 
 exports[`<Route /> should support children 1`] = `
-<Router
-  history={null}
->
+<Router>
   <Route
     path="/myroute/:id"
   >
@@ -30,9 +26,7 @@ exports[`<Route /> should support children 1`] = `
 `;
 
 exports[`<Route /> should support exact prop 1`] = `
-<Router
-  history={null}
->
+<Router>
   <Route
     path="/"
   />
@@ -51,9 +45,7 @@ exports[`<Route /> should support exact prop 1`] = `
 `;
 
 exports[`<Route /> should support nested Routes 1`] = `
-<Router
-  history={null}
->
+<Router>
   <Route
     path="/"
   >
@@ -68,9 +60,7 @@ exports[`<Route /> should support nested Routes 1`] = `
 `;
 
 exports[`<Route /> should support nested Routes 2`] = `
-<Router
-  history={null}
->
+<Router>
   <Route
     path="/"
   />

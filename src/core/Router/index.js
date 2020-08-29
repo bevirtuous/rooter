@@ -4,6 +4,10 @@ import history from '../history';
 import stack from '../Stack';
 import * as constants from '../constants';
 
+function normaliseParams(params) {
+  return typeof params === 'string' ? { to: params } : params;
+}
+
 function Router() {
   let currentIndex = 0;
   let historyListener;
@@ -18,10 +22,6 @@ function Router() {
 
   function updateListeners(params) {
     listeners.forEach((func) => func(params));
-  }
-
-  function getCurrentIndex() {
-    return currentIndex;
   }
 
   function addInitialRoute() {
@@ -116,11 +116,7 @@ function Router() {
         return;
       }
 
-      const {
-        emit = true,
-        meta,
-        to,
-      } = params;
+      const { emit = true, meta, to } = params;
       let unlisten = null;
 
       // Remove all unwanted items from the stack.
@@ -258,8 +254,10 @@ function Router() {
    * @returns {Promise}
    */
   const push = (params) => {
+    const nextParams = normaliseParams(params);
     nativeEvent = false;
-    return handlePush(params);
+
+    return handlePush(nextParams);
   };
 
   /**
@@ -276,8 +274,10 @@ function Router() {
    * @returns {Promise}
    */
   const replace = (params) => {
+    const nextParams = normaliseParams(params);
     nativeEvent = false;
-    return handleReplace(params);
+
+    return handleReplace(nextParams);
   };
 
   /**
@@ -314,25 +314,18 @@ function Router() {
       .then(() => {
         if (!to) {
           updateListeners(next);
-          nativeEvent = true;
           resolve(next);
-          return;
+        } else {
+          handleReplace({ to, meta, emit: false }).then((replaced) => {
+            next.next = replaced.next;
+            updateListeners(next);
+            resolve(next);
+          });
         }
 
-        handleReplace({ to, meta, emit: false }).then((replaced) => {
-          next.next = replaced.next;
-
-          nativeEvent = true;
-          updateListeners(next);
-          resolve(next);
-        });
+        nativeEvent = true;
       });
   });
-
-  /**
-   * @returns {Route}
-   */
-  const getCurrentRoute = () => stack.getByIndex(currentIndex);
 
   function handleNativeEvent(location, action) {
     if (!nativeEvent) {
@@ -372,8 +365,9 @@ function Router() {
   }
 
   return {
-    getCurrentIndex,
-    getCurrentRoute,
+    getCurrentIndex: () => currentIndex,
+    getCurrentRoute: () => stack.getByIndex(currentIndex),
+    getListenerCount: () => listeners.length,
     init,
     listen: addListener,
     pop,

@@ -14,6 +14,7 @@ describe('<Router />', () => {
     ));
 
     expect(app).toMatchSnapshot();
+    app.unmount();
   });
 
   it('should update on navigation action', async () => {
@@ -34,5 +35,20 @@ describe('<Router />', () => {
     app.update();
 
     expect(app.html()).toBe('/myroute/456');
+    app.unmount();
+  });
+
+  it('should remove listener when unmounted', () => {
+    const app = mount((
+      <Router>
+        <p />
+      </Router>
+    ));
+
+    expect(router.getListenerCount()).toBe(1);
+
+    app.unmount();
+
+    expect(router.getListenerCount()).toBe(0);
   });
 });
