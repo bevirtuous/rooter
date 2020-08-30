@@ -133,17 +133,21 @@ function Router() {
         meta,
       });
 
-      if (!nativePush) {
-        // Add item to the stack
-        stack.add(next.id, next);
-      }
-
       /**
        * The history event callback.
+       * @param {Object} location The current history location.
        */
-      const callback = () => {
+      const callback = (location) => {
         // Unsubscribe from the history events.
         unlisten();
+
+        // Update route id
+        next.id = location.key;
+
+        if (!nativePush) {
+        // Add item to the stack
+          stack.add(next.id, next);
+        }
 
         // Increment the route index.
         currentIndex += 1;
@@ -166,14 +170,9 @@ function Router() {
 
       // Perform the history push action.
       if (!nativeEvent) {
-        history.push({
-          pathname: to,
-        }, {
-          ...meta,
-          route: { id: next.id },
-        });
+        history.push({ pathname: to }, meta);
       } else {
-        callback();
+        callback(history.location);
       }
     });
   }
@@ -208,18 +207,20 @@ function Router() {
     });
     const end = { action: constants.REPLACE, prev, next };
 
-    // Add item to the stack.
-    stack.add(next.id, next);
-
     // Remove item being replaced.
     stack.remove(id);
 
     /**
      * The history event callback.
+     * @param {Object} location The current hstory location;
      */
-    const callback = () => {
+    const callback = (location) => {
       // Unsubscribe from the history events.
       unlisten();
+
+      next.id = location.key;
+
+      stack.add(next.id, next);
 
       // Emit completion event.
       if (emit) {
@@ -238,14 +239,9 @@ function Router() {
 
     // Perform the history replace action.
     if (!nativeEvent) {
-      history.replace({
-        pathname: to,
-      }, {
-        ...meta,
-        route: { id },
-      });
+      history.replace({ pathname: to }, meta);
     } else {
-      callback();
+      callback(history.location);
     }
   });
 
@@ -334,7 +330,7 @@ function Router() {
 
     const next = stack.getByIndex(currentIndex + 1);
 
-    if (next && location.state && location.state.route && next.id === location.state.route.id) {
+    if (next && next.id === location.key) {
       handlePush({
         to: next.location,
         meta: location.state,

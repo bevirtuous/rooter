@@ -52,12 +52,9 @@ describe('Router', () => {
         });
 
         expect(history.location.pathname).toBe(`${pathname1}?s=phrase#what`);
-        expect(history.location.state).toEqual(expect.objectContaining({
-          route: {
-            id: expect.any(String),
-          },
+        expect(history.location.state).toEqual({
           test: 123,
-        }));
+        });
       });
     });
 
@@ -244,12 +241,9 @@ describe('Router', () => {
       });
 
       expect(history.location.pathname).toBe('/myroute/789');
-      expect(history.location.state).toEqual(expect.objectContaining({
-        route: {
-          id: expect.any(String),
-        },
+      expect(history.location.state).toEqual({
         test: '123',
-      }));
+      });
     });
 
     it('should allow passing a string when replacing', () => (
