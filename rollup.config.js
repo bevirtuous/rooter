@@ -8,7 +8,15 @@ const env = process.env.NODE_ENV;
 
 module.exports = [
   {
-    external: ['react', 'react-dom', 'rxjs', 'rxjs/operators', 'svelte'],
+    external: [
+      'history',
+      'query-string',
+      'react',
+      'react-dom',
+      'rxjs',
+      'rxjs/operators',
+      'svelte',
+    ],
     input: {
       index: 'src/core/index.js',
       react: 'src/react/index.js',

@@ -111,7 +111,7 @@ function Router() {
        * The history event callback.
        * @param {Object} location The current history location.
        */
-      const callback = (location) => {
+      const callback = ({ location }) => {
         // Unsubscribe from the history events.
         unlisten();
 
@@ -150,7 +150,7 @@ function Router() {
       if (!nativeEvent) {
         history.push({ pathname: to }, meta);
       } else {
-        callback(history.location);
+        callback({ location: history.location });
       }
     });
   }
@@ -173,7 +173,7 @@ function Router() {
      * The history event callback.
      * @param {Object} location The current hstory location;
      */
-    const callback = (location) => {
+    const callback = ({ location }) => {
       // Unsubscribe from the history events.
       unlisten();
 
@@ -205,7 +205,7 @@ function Router() {
     if (!nativeEvent) {
       history.replace({ pathname: to }, meta);
     } else {
-      callback(history.location);
+      callback({ location: history.location });
     }
   });
 
@@ -287,7 +287,7 @@ function Router() {
       });
   });
 
-  function handleNativeEvent(location, action) {
+  function handleNativeEvent({ location, action }) {
     if (!nativeEvent) {
       return;
     }

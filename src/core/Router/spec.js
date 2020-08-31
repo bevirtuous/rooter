@@ -31,9 +31,9 @@ describe('Router', () => {
         },
       };
 
-      const didCallback = jest.fn();
+      const callback = jest.fn();
 
-      listener = router.listen(didCallback);
+      listener = router.listen(callback);
 
       return router.push(params).then((result) => {
         expect(router.getCurrentIndex()).toBe(1);
@@ -44,13 +44,15 @@ describe('Router', () => {
         expect(route.query).toEqual({ s: 'phrase' });
         expect(route.meta).toEqual({ test: 123 });
 
-        expect(didCallback).toHaveBeenCalledWith({
+        expect(callback).toHaveBeenCalledWith({
           action: constants.PUSH,
           next: result.next,
           prev: result.prev,
         });
 
-        expect(history.location.pathname).toBe(`${pathname1}?s=phrase#what`);
+        expect(history.location.pathname).toBe(pathname1);
+        expect(history.location.search).toBe('?s=phrase');
+        expect(history.location.hash).toBe('#what');
         expect(history.location.state).toEqual({
           test: 123,
         });
@@ -302,13 +304,18 @@ describe('Router', () => {
 
   describe('handleNativeEvent()', () => {
     it('should natively navigate backwards', async (done) => {
-      const spy = jest.spyOn(history, 'goBack');
+      const spy = jest.spyOn(history, 'back');
       await router.push({ to: '/somewhere' });
       await router.push({ to: '/somewhere/else' });
 
-      history.goBack();
+      const callback = jest.fn();
+
+      listener = router.listen(callback);
+
+      history.back();
 
       setTimeout(() => {
+        expect(callback).toHaveBeenCalledTimes(1);
         expect(spy).toHaveBeenCalledTimes(1);
         expect(router.getCurrentRoute().pathname).toEqual('/somewhere');
         done();
@@ -316,15 +323,20 @@ describe('Router', () => {
     });
 
     it('should natively navigate forwards', async (done) => {
-      const spy = jest.spyOn(history, 'goForward');
+      const spy = jest.spyOn(history, 'forward');
       const url = '/somewhere?hi=123#what';
 
       await router.push({ to: url });
       await router.pop();
 
-      history.goForward();
+      const callback = jest.fn();
+
+      listener = router.listen(callback);
+
+      history.forward();
 
       setTimeout(() => {
+        expect(callback).toHaveBeenCalledTimes(1);
         expect(spy).toHaveBeenCalledTimes(1);
         expect(router.getCurrentRoute().location).toEqual(url);
         done();
