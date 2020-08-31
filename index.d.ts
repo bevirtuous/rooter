@@ -20,7 +20,6 @@ export interface Route {
   meta?: ObjectType | null;
   pathname: string;
   query: Query;
-  created: number;
 }
 
 interface RouterHistory {

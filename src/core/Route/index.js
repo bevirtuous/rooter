@@ -10,8 +10,6 @@ function Route(options) {
   const hash = splitPath[1] || null;
   const { query, url: pathname } = queryString.parseUrl(path);
 
-  const created = Date.now();
-
   return {
     id,
     hash,
@@ -19,7 +17,6 @@ function Route(options) {
     meta,
     pathname,
     query,
-    created,
   };
 }
 

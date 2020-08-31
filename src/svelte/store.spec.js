@@ -7,7 +7,6 @@ describe('svelte - store', () => {
     history.push({ to: '/hello ' });
 
     expect(get(rooterStore)).toEqual(expect.objectContaining({
-      created: expect.any(Number),
       hash: null,
       id: expect.any(String),
       location: '/hello',
