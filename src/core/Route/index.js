@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import { parseUrl } from 'query-string';
 
 const parseOptions = {
   arrayFormat: 'comma',
@@ -14,7 +14,7 @@ function Route(options) {
   const splitPath = location.split('#');
   const path = splitPath[0];
   const hash = splitPath[1] || null;
-  const { query, url: pathname } = queryString.parseUrl(path, parseOptions);
+  const { query, url: pathname } = parseUrl(path, parseOptions);
 
   return {
     id,

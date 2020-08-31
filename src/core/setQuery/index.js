@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import { stringify } from 'query-string';
 import router from '../Router';
 
 function setQuery(input) {
@@ -7,7 +7,7 @@ function setQuery(input) {
   // If the input is a function then we want to
   // call it and pass the current query.
   const pairs = (typeof input === 'function') ? input(query) : input;
-  const newQuery = queryString.stringify(pairs);
+  const newQuery = stringify(pairs);
 
   return router.push({ to: `${pathname}?${newQuery}` });
 }
