@@ -1,5 +1,4 @@
 import Route from '../Route';
-import * as errors from './errors';
 import history from '../history';
 import stack from '../Stack';
 import * as constants from '../constants';
@@ -10,8 +9,8 @@ function normaliseParams(params) {
 
 function Router() {
   let currentIndex = 0;
-  let historyListener;
   let nativeEvent = true;
+  let historyListener;
   const listeners = [];
 
   function addListener(func) {
@@ -25,11 +24,12 @@ function Router() {
   }
 
   function addInitialRoute() {
-    const { hash, pathname, search } = history.location;
-    const fullPathname = `${pathname}${search}${hash}`;
-    const route = new Route({ pathname: fullPathname });
+    const { hash, key, pathname, search } = history.location;
+    const location = `${pathname}${search}${hash}`;
+    const id = key || 'default';
+    const route = new Route({ id, pathname: location });
 
-    stack.add(route.id, route);
+    stack.add(id, route);
   }
 
   /**
@@ -37,7 +37,7 @@ function Router() {
    * @returns {Promise}
    */
   function handlePop(params = {}) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const {
         emit = true,
         forceNative = false,
@@ -45,12 +45,6 @@ function Router() {
         meta = null,
       } = params;
       let unlisten = null;
-
-      if (steps <= 0) {
-        reject(new Error(errors.EINVALIDSTEPS));
-        nativeEvent = true;
-        return;
-      }
 
       // Get id of target route.
       const targetIndex = Math.max(currentIndex - steps, 0);
@@ -101,21 +95,7 @@ function Router() {
    * @returns {Promise}
    */
   function handlePush(params, cleanStack = true, nativePush = false) {
-    return new Promise((resolve, reject) => {
-      // Check for missing parameters.
-      if (!params) {
-        reject(new Error(errors.EPARAMSMISSING));
-        nativeEvent = true;
-        return;
-      }
-
-      // Check for empty params.
-      if (Object.keys(params).length === 0) {
-        reject(new Error(errors.EPARAMSEMPTY));
-        nativeEvent = true;
-        return;
-      }
-
+    return new Promise((resolve) => {
       const { emit = true, meta, to } = params;
       let unlisten = null;
 
@@ -127,12 +107,6 @@ function Router() {
         }
       }
 
-      const prev = stack.getByIndex(currentIndex);
-      const next = nativePush ? stack.getByIndex(currentIndex + 1) : new Route({
-        pathname: to,
-        meta,
-      });
-
       /**
        * The history event callback.
        * @param {Object} location The current history location.
@@ -141,12 +115,16 @@ function Router() {
         // Unsubscribe from the history events.
         unlisten();
 
-        // Update route id
-        next.id = location.key;
+        const prev = stack.getByIndex(currentIndex);
+        const next = nativePush ? stack.getByIndex(currentIndex + 1) : new Route({
+          id: location.key,
+          meta,
+          pathname: to,
+        });
 
         if (!nativePush) {
         // Add item to the stack
-          stack.add(next.id, next);
+          stack.add(location.key, next);
         }
 
         // Increment the route index.
@@ -177,21 +155,7 @@ function Router() {
     });
   }
 
-  const handleReplace = (params) => new Promise((resolve, reject) => {
-    // Check for missing parameters.
-    if (!params) {
-      reject(new Error(errors.EPARAMSMISSING));
-      nativeEvent = true;
-      return;
-    }
-
-    // Check for empty params.
-    if (Object.keys(params).length === 0) {
-      reject(new Error(errors.EPARAMSEMPTY));
-      nativeEvent = true;
-      return;
-    }
-
+  const handleReplace = (params) => new Promise((resolve) => {
     const {
       emit = true,
       to,
@@ -201,11 +165,6 @@ function Router() {
 
     const { id } = stack.getByIndex(currentIndex);
     const prev = stack.get(id);
-    const next = new Route({
-      pathname: to,
-      meta,
-    });
-    const end = { action: constants.REPLACE, prev, next };
 
     // Remove item being replaced.
     stack.remove(id);
@@ -218,9 +177,14 @@ function Router() {
       // Unsubscribe from the history events.
       unlisten();
 
-      next.id = location.key;
+      const next = new Route({
+        id: location.key,
+        meta,
+        pathname: to,
+      });
+      const end = { action: constants.REPLACE, prev, next };
 
-      stack.add(next.id, next);
+      stack.add(location.key, next);
 
       // Emit completion event.
       if (emit) {

@@ -2,7 +2,6 @@ import router from './index';
 import stack from '../Stack';
 import history from '../history';
 import * as constants from '../constants';
-import * as errors from './errors';
 
 const pathname1 = '/myroute/123';
 
@@ -77,18 +76,6 @@ describe('Router', () => {
       expect(stack.getAll().size).toBe(2);
       expect(stack.getByIndex(1).pathname).toBe('/myroute/abc');
     });
-
-    it('should reject when params are missing', () => (
-      router.push().catch((error) => (
-        expect(error).toEqual(new Error(errors.EPARAMSMISSING))
-      ))
-    ));
-
-    it('should reject when params are empty', () => (
-      router.push({}).catch((error) => (
-        expect(error).toEqual(new Error(errors.EPARAMSEMPTY))
-      ))
-    ));
 
     it('should not emit push event', () => {
       const params = {
@@ -169,13 +156,6 @@ describe('Router', () => {
       });
     });
 
-    it('should not pop when steps is negative', async () => {
-      await router.push({ to: '/myroute/456' });
-      await router.pop({ steps: -3 }).catch((error) => (
-        expect(error).toEqual(new Error(errors.EINVALIDSTEPS))
-      ));
-    });
-
     it('should clamp when steps is larger than the stack', async (done) => {
       await router.push({ to: '/myroute/456' });
       await router.push({ to: '/myroute/789' });
@@ -252,18 +232,6 @@ describe('Router', () => {
       ))
     ));
 
-    it('should reject when params are missing', () => (
-      router.replace().catch((error) => (
-        expect(error).toEqual(new Error(errors.EPARAMSMISSING))
-      ))
-    ));
-
-    it('should reject when params are empty', () => (
-      router.replace({}).catch((error) => (
-        expect(error).toEqual(new Error(errors.EPARAMSEMPTY))
-      ))
-    ));
-
     it('should not emit push event', () => {
       const params = {
         to: pathname1,
@@ -277,16 +245,6 @@ describe('Router', () => {
       return router.replace(params).then(() => {
         expect(callback).not.toHaveBeenCalled();
       });
-    });
-
-    it('should reject when pathname cannot be matched', () => {
-      const params = {
-        to: pathname1,
-      };
-
-      return router.replace(params).catch((error) => (
-        expect(error).toEqual(new Error(errors.EINVALIDPATHNAME))
-      ));
     });
   });
 

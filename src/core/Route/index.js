@@ -3,7 +3,7 @@ import queryString from 'query-string';
 function Route(options) {
   const { meta = {} } = options;
   const location = options.pathname.trim();
-  const id = Math.random().toString(36).substr(2, 5);
+  const id = options.id;
 
   const splitPath = location.split('#');
   const path = splitPath[0];
