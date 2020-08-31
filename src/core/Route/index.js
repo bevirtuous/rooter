@@ -1,5 +1,11 @@
 import queryString from 'query-string';
 
+const parseOptions = {
+  arrayFormat: 'comma',
+  parseBooleans: true,
+  parseNumbers: true,
+};
+
 function Route(options) {
   const { meta = {} } = options;
   const location = options.pathname.trim();
@@ -8,7 +14,7 @@ function Route(options) {
   const splitPath = location.split('#');
   const path = splitPath[0];
   const hash = splitPath[1] || null;
-  const { query, url: pathname } = queryString.parseUrl(path);
+  const { query, url: pathname } = queryString.parseUrl(path, parseOptions);
 
   return {
     id,

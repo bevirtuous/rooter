@@ -25,6 +25,18 @@ describe('Route', () => {
     expect(route.pathname).toEqual('/myroute/123');
   });
 
+  it('should handle query datatypes', () => {
+    const route = new Route({
+      pathname: ' /myroute/123?foo=a,b,c&count=3&option=false',
+    });
+
+    expect(route.query).toEqual({
+      count: 3,
+      foo: ['a', 'b', 'c'],
+      option: false,
+    });
+  });
+
   it('should set query and state to be empty when missing', () => {
     const route = new Route({
       pathname: '/myroute/123',
