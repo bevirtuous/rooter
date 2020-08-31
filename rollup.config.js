@@ -9,7 +9,7 @@ const env = process.env.NODE_ENV;
 module.exports = [
   {
     external: [
-      'history',
+      'history/browser',
       'query-string',
       'react',
       'react-dom',

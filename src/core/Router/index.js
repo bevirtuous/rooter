@@ -1,5 +1,5 @@
+import history from 'history/browser';
 import Route from '../Route';
-import history from '../history';
 import stack from '../Stack';
 import * as constants from '../constants';
 

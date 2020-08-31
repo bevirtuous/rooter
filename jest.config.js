@@ -6,11 +6,11 @@ module.exports = {
   ],
   testRegex: '(/__tests__/.*|(\\.|/)spec)\\.(js|jsx)?$',
   testPathIgnorePatterns: [
-    '/node_modules/',
     '/coverage/',
+    '/node_modules/',
   ],
   transformIgnorePatterns: [
-    '/node_modules/',
+    '/node_modules\\/(?!history)(.*)',
   ],
   unmockedModulePathPatterns: [
     '<rootDir>/node_modules/react/',

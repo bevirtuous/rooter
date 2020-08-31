@@ -1,6 +1,6 @@
+import history from 'history/browser';
 import router from './index';
 import stack from '../Stack';
-import history from '../history';
 import * as constants from '../constants';
 
 const pathname1 = '/myroute/123';
