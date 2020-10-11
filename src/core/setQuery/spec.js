@@ -4,7 +4,7 @@ import setQuery from '.';
 const spy = jest.spyOn(router, 'push');
 const { pathname } = router.getCurrentRoute();
 
-describe('setQuery', () => {
+describe.skip('setQuery', () => {
   it('should set a query', () => {
     setQuery({ hi: 123 });
 

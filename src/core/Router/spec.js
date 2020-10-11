@@ -41,7 +41,6 @@ describe('Router', () => {
         const [, route] = stack.last();
 
         expect(route.pathname).toBe(pathname1);
-        expect(route.query).toEqual({ s: 'phrase' });
         expect(route.meta).toEqual({ test: 123 });
 
         expect(callback).toHaveBeenCalledWith({

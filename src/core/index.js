@@ -1,5 +1,4 @@
 import router from './Router';
-import setQuery from './setQuery';
 
 export const history = {
   back: router.pop,
@@ -10,7 +9,6 @@ export const history = {
   pop: router.pop,
   replace: router.replace,
   reset: router.reset,
-  setQuery,
 };
 
 export {
