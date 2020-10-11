@@ -17,3 +17,5 @@ export {
   REPLACE,
   RESET,
 } from './constants';
+
+export { addPlugin as plugin } from './plugins';

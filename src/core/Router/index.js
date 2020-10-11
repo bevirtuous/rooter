@@ -8,10 +8,11 @@ function normaliseParams(params) {
 }
 
 function Router() {
+  const listeners = [];
+
   let currentIndex = 0;
   let nativeEvent = true;
   let historyListener;
-  const listeners = [];
 
   function addListener(func) {
     const length = listeners.push(func);
