@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`React - useLocation should return current location 1`] = `
+Object {
+  "fragment": "",
+  "id": "default",
+  "pathname": "/myroute/123",
+  "search": "",
+  "state": Object {},
+}
+`;

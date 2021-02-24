@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`React - Store should allow push 1`] = `
+Object {
+  "back": [Function],
+  "current": 2,
+  "forward": [Function],
+  "push": [Function],
+  "routes": Array [
+    Object {
+      "fragment": "title",
+      "id": "default",
+      "pathname": "/hello/world",
+      "search": "?param=123",
+      "state": Object {},
+    },
+    Object {
+      "fragment": "",
+      "id": "#2",
+      "pathname": "/second/route",
+      "search": "",
+      "state": Object {},
+    },
+    Object {
+      "fragment": "",
+      "id": "#3",
+      "pathname": "/hello/world/again",
+      "search": "",
+      "state": Object {
+        "hi": "123",
+      },
+    },
+  ],
+}
+`;
+
+exports[`React - Store should allow push and remove forward routes 1`] = `
+Object {
+  "back": [Function],
+  "current": 1,
+  "forward": [Function],
+  "push": [Function],
+  "routes": Array [
+    Object {
+      "fragment": "title",
+      "id": "default",
+      "pathname": "/hello/world",
+      "search": "?param=123",
+      "state": Object {},
+    },
+    Object {
+      "fragment": "",
+      "id": "#3",
+      "pathname": "/hello/world/again",
+      "search": "",
+      "state": Object {
+        "hi": "123",
+      },
+    },
+  ],
+}
+`;
+
+exports[`React - Store should correctly create the store with initial history entry 1`] = `
+Object {
+  "back": [Function],
+  "current": 1,
+  "forward": [Function],
+  "push": [Function],
+  "routes": Array [
+    Object {
+      "fragment": "title",
+      "id": "default",
+      "pathname": "/hello/world",
+      "search": "?param=123",
+      "state": Object {},
+    },
+    Object {
+      "fragment": "",
+      "id": "#2",
+      "pathname": "/second/route",
+      "search": "",
+      "state": Object {},
+    },
+  ],
+}
+`;

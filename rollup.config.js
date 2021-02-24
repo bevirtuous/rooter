@@ -12,15 +12,16 @@ module.exports = [
   {
     external: [
       'history/browser',
-      'query-string',
       'react',
       'react-dom',
       'rxjs',
       'rxjs/operators',
       'svelte',
+      'zustand',
     ],
     input: {
       index: 'src/core/index.js',
+      plugins: 'src/plugins/index.js',
       react: 'src/react/index.js',
       rx: 'src/rx/index.js',
     },

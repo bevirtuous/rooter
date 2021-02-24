@@ -31,7 +31,6 @@ interface RouterHistory {
   push(params: Params): Promise<{ prev: Route, next: Route }>,
   replace(params: Params): Promise<{ action: 'REPLACE', prev: Route, next: Route }>,
   reset(params: Params): Promise<Route>,
-  setQuery(input: Query): Promise<{ prev: Route, next: Route }>
 }
 
 export const history: RouterHistory;
