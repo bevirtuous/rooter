@@ -1,10 +1,9 @@
 import React from 'react';
-import { renderHook } from '@testing-library/react-hooks';
 import { act } from 'react-dom/test-utils';
 import { mount, shallow } from 'enzyme';
 import Route from './Route';
 import useHistory from './useHistory';
-import useRouter from './useRouter';
+import Router from './Router';
 
 describe('React - <Route />', () => {
   it('should render when matched to history', () => {
@@ -48,18 +47,16 @@ describe('React - <Route />', () => {
   });
 
   it('should react to history events', (done) => {
-    renderHook(() => useRouter());
-
     const history = useHistory();
     const app = mount((
-      <div>
+      <Router>
         <Route path="/myroute/:id">
           <div>First route</div>
         </Route>
         <Route path="/test">
           <div>Second route</div>
         </Route>
-      </div>
+      </Router>
     ));
 
     expect(app.find(Route).at(0).html()).toBe('<div>First route</div>');
@@ -74,6 +71,6 @@ describe('React - <Route />', () => {
       expect(app.find(Route).at(0).html()).toBeNull();
       expect(app.find(Route).at(1).html()).toBe('<div>Second route</div>');
       done();
-    }, 1000)
+    }, 1000);
   });
 });

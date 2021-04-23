@@ -6,9 +6,9 @@ jest.mock('history/browser', () => ({
     search: '?param=123',
     hash: 'title',
     state: null,
-    key: 'default'
-  }
-}))
+    key: 'default',
+  },
+}));
 
 describe('React - Store', () => {
   beforeAll(() => {
@@ -17,7 +17,7 @@ describe('React - Store', () => {
       pathname: '/second/route',
       search: '',
       hash: '',
-      key: '#2'
+      key: '#2',
     });
   });
 
@@ -45,7 +45,7 @@ describe('React - Store', () => {
     forward();
     expect(store.getState().current).toBe(1);
   });
-  
+
   it('should not go forward past limit', () => {
     const { forward } = store.getState();
     store.setState({ current: 1 });
@@ -63,7 +63,7 @@ describe('React - Store', () => {
       state: {
         hi: '123',
       },
-      key: '#3'
+      key: '#3',
     });
     expect(store.getState()).toMatchSnapshot();
   });
@@ -78,7 +78,7 @@ describe('React - Store', () => {
       state: {
         hi: '123',
       },
-      key: '#3'
+      key: '#3',
     });
     expect(store.getState()).toMatchSnapshot();
   });
@@ -91,7 +91,7 @@ describe('React - Store', () => {
       pathname: '/hello/world/again',
       search: '',
       hash: '',
-      key: '#3'
+      key: '#3',
     });
 
     const { current, routes } = store.getState();

@@ -28,8 +28,6 @@ export function useHistory(): {
 
 export function useParams(): ObjectType
 
-export function useRoute(): RouteTypeExtended
-
 export const RouteContext: React.Context<RouteTypeExtended>
 
 export const RouterContext: React.Context<{

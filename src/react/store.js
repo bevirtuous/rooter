@@ -13,18 +13,18 @@ function createStoreEntry(location) {
 }
 
 export default create((set) => {
-  const route = createStoreEntry(history.location)
+  const route = createStoreEntry(history.location);
 
   return {
     current: 0,
     routes: [route],
-    back: () => set(state => ({
+    back: () => set((state) => ({
       current: Math.max(0, state.current - 1),
     })),
-    forward: () => set(state => ({
+    forward: () => set((state) => ({
       current: Math.min(state.routes.length - 1, state.current + 1),
     })),
-    push: (location) => set(state => {
+    push: (location) => set((state) => {
       const nextCurrent = state.current + 1;
       const nextRoute = state.routes[nextCurrent];
 
