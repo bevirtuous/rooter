@@ -21,12 +21,10 @@ module.exports = [
     },
     output: [
       {
-        chunkFileNames: 'chunk-[hash].js',
         dir: 'cjs',
         format: 'cjs',
       },
       {
-        chunkFileNames: 'chunk-[hash].js',
         dir: 'esm',
         format: 'esm',
       },
@@ -38,10 +36,7 @@ module.exports = [
       }),
       resolve({
         preferBuiltins: false,
-        extensions: ['.mjs', '.js', '.jsx', '.json', '.node'],
-      }),
-      replace({
-        'process.env.NODE_ENV': JSON.stringify(env),
+        extensions: ['.js', '.jsx'],
       }),
       commonjs(),
       cleanup(),
