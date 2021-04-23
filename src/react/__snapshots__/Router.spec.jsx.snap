@@ -1,27 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`React - <Route /> should render when matched to history 1`] = `
-<ContextProvider
-  value={
-    Object {
-      "fragment": "",
-      "id": "default",
-      "params": Object {
-        "id": "123",
-      },
-      "pathname": "/myroute/123",
-      "pattern": "/myroute/:id",
-      "search": "",
-      "state": Object {},
-    }
-  }
->
-  <div>
-    Hello World.
-  </div>
-</ContextProvider>
-`;
-
 exports[`React - <Router /> should render children 1`] = `
 <div>
   Hello World.
