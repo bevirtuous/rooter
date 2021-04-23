@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react-hooks';
 import history from 'history/browser';
 import store from './store';
 import useRouter from './useRouter';

@@ -1,2 +1,4 @@
 coverage
+cjs
+esm
 node_modules
