@@ -9,7 +9,6 @@ module.exports = [
     external: [
       'history/browser',
       'react',
-      'react-dom',
       'zustand',
     ],
     input: {

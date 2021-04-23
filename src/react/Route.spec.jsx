@@ -1,5 +1,5 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
+import { act } from '@testing-library/react';
 import { mount, shallow } from 'enzyme';
 import Route from './Route';
 import useHistory from './useHistory';
