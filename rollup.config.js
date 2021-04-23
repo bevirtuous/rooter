@@ -12,7 +12,6 @@ module.exports = [
       'zustand',
     ],
     input: {
-      plugins: 'src/plugins/index.js',
       react: 'src/react/index.js',
     },
     output: [
