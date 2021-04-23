@@ -8,19 +8,13 @@ module.exports = [
   {
     external: [
       'history/browser',
+      'query-string',
       'react',
       'zustand',
     ],
     input: {
       index: 'src/react/index.js',
       react: 'src/react/index.js',
-      Route: 'src/react/Route.jsx',
-      Router: 'src/react/Router.jsx',
-      useHistory: 'src/react/useHistory.js',
-      useLocation: 'src/react/useLocation.js',
-      usePath: 'src/react/usePath.js',
-      useParams: 'src/react/useParams.js',
-      useSearchParams: 'src/react/useSearchParams.js',
     },
     output: [
       {

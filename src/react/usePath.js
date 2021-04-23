@@ -21,8 +21,7 @@ function usePath(path) {
       isMatch,
       params,
     };
-  }, [location.id])
-
+  }, [location.pathname]);
 }
 
 export default usePath;

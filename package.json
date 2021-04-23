@@ -1,6 +1,6 @@
 {
   "name": "rooter",
-  "version": "1.0.0-beta.44",
+  "version": "1.0.0-beta.48",
   "description": "",
   "scripts": {
     "start": "NODE_ENV=development rollup -c -w",
@@ -12,9 +12,8 @@
   "main": "cjs/index.js",
   "module": "esm/index.js",
   "files": [
+    "index.js",
     "react.js",
-    "rx.js",
-    "svelte.js",
     "cjs/*",
     "esm/*"
   ],
@@ -54,7 +53,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "rollup": "^1.27.13",
+    "rollup": "^2.45.2",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-cleanup": "^3.2.1"
   },

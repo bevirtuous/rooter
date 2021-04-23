@@ -4,7 +4,7 @@ function useHistory() {
   return {
     back: history.back,
     push: history.push,
-  }
+  };
 }
 
 export default useHistory;
